@@ -1,4 +1,4 @@
-# Yeti Data warehousing 
+# YETI Data warehousing 
 
 The Goal of this library is to store all code, workflows and other Data Warehouse (or) Date Lake Objects.
 
