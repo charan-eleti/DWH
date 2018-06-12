@@ -1,6 +1,6 @@
 # YETI Data warehousing 
 
-The Goal of this library is to store all code, workflows and other Data Warehouse (or) Date Lake Objects.
+The Goal of this library is to store any related code, workflows and other Data Warehouse (or) Date Lake Objects.
 
 ### Goals
 
