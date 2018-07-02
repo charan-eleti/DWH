@@ -1,0 +1,25 @@
+package com.edifice
+
+import org.apache.spark.sql.{Row, SparkSession}
+
+import scala.collection.mutable.ArrayBuffer
+
+object edificeReport{
+
+  def parse(keyValue: (String, String)): ArrayBuffer[Row] = {
+
+  }
+}
+object processEdifice {
+  def main(args: Array[String]) {
+
+    val sparkSession = SparkSession.builder.
+      master("local")
+      .appName("edifice splitFiles")
+      .getOrCreate()
+    val sc = sparkSession.sparkContext
+    val dataRecRDD = sc.wholeTextFiles("""C:\Intellij\EDW\src\main\resources\YETICOOLERS_ACADEMYSPORTS_ACADEMYSPORTS_20180624.txt""")
+    //println(dataRecRDD.collect.toList)
+    val data_rec = dataRecRDD.flatMap(x => edificeReport.parse(x))
+  }
+}
