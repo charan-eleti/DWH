@@ -1,13 +1,65 @@
 package com.edifice
 
-import org.apache.spark.sql.{Row, SparkSession}
-
-import scala.collection.mutable.ArrayBuffer
+import org.apache.spark.sql.SparkSession
 
 object edificeReport{
 
-  def parse(keyValue: (String, String)): ArrayBuffer[Row] = {
+  def mapSections(reportText: Array[String]): Map[String, String] = {
+    var reportName: String = ""
+    var retailer: String = ""
+    var account: String = ""
+    var year_day: String = ""
+    var flag: String = ""
+    //var reportBuffer: ArrayBuffer[String] = new ArrayBuffer
+    //var reportMap: Map[String, ArrayBuffer[String]] = Map()
+    var reportMap: Map[String, String] = Map()
+    for (line <- reportText){
+        var header = line.split("\r\n").head
+        var splitHeader = header.split('|')
+        retailer = splitHeader(1).replace(" ", "_")
+        account = splitHeader(2).replace(" - ", "_").replace(" ", "_")
+        //year_day = reportDate(splitHeader(3))
+        year_day = "20180201"
+        println(year_day)
+        flag = splitHeader(4)
+      println(line)
+        //val reportLine = line.split("\n").map(x => retailer + '|' + account + '|' + x + '|' + flag)
+      val reportLine = line.replace("\n", "###").split("###")
+      println(reportLine(1))
+      for (line <- reportLine){
+        reportName = retailer + "_" + account + "_" + year_day
+        //println(reportName)
+        reportMap += (reportName -> line)
+        //println(reportMap)
+      }
+      //reportName = account
+    }
+    //reportMap += (reportName -> reportBuffer)
+    return reportMap
+  }
 
+  def splitSectionAndClean(text: String): Array[String] = {
+    val splitLines = text.replace("\r\nHDR", "####HDR").split("####")
+    return splitLines
+  }
+/*
+  def parseData(txt: String): Row ={
+    val testRegex = """\s*("""
+    val matchData = List(textRegex,)
+    val matchData(retailer,account,UPC,STORENUMBER,QS,QA,QR,QU,XR,flag) = txt
+
+  }
+*/
+  def parse(keyValue: (String, String)): Map[String, String] = {
+    val reportMap = mapSections(splitSectionAndClean(keyValue._2))
+    /*
+    var r = new ArrayBuffer
+    for (line <- reportMap){
+      r += Row(line)
+    }
+    r
+    */
+    reportMap
   }
 }
 object processEdifice {
@@ -18,8 +70,12 @@ object processEdifice {
       .appName("edifice splitFiles")
       .getOrCreate()
     val sc = sparkSession.sparkContext
+
     val dataRecRDD = sc.wholeTextFiles("""C:\Intellij\EDW\src\main\resources\YETICOOLERS_ACADEMYSPORTS_ACADEMYSPORTS_20180624.txt""")
     //println(dataRecRDD.collect.toList)
     val data_rec = dataRecRDD.flatMap(x => edificeReport.parse(x))
+    for ((k,v) <- data_rec) printf("key: %s, value: %s\n", k, v)
+    //println(data_rec.collect.toList)
+    //val dataRecDF = sqlContext.createDataFrame()
   }
 }
