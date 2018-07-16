@@ -1,0 +1,35 @@
+DROP TABLE IF EXISTS YETIDM.EDIFICE;
+CREATE TABLE IF NOT EXISTS YETIDM.EDIFICE
+(
+	account	STRING,
+	upc	STRING,
+	storenumber	STRING,
+	qs	INT,
+	qa	INT,
+	qr	INT,
+	qu	INT,
+	xr	DOUBLE,
+	flag	CHAR(1),
+	loadDate	DATE
+)
+PARTITIONED BY (Retailer STRING,year_day DATE)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE;
+
+
+INSERT OVERWRITE TABLE YETIDM.EDIFICE PARTITION(Retailer,year_day) 
+SELECT account,
+upc,
+storenumber,
+qs,
+qa,
+qr,
+qu,
+xr,
+flag,
+CURRENT_DATE AS loadDate,
+Retailer,
+weekending AS year_day
+FROM DEFAULT.EDIFICE_STG;
