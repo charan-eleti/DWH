@@ -12,9 +12,10 @@ object HDFSUtil {
   conf.addResource(hdfsCoreSitePath)
   conf.addResource(hdfsHDFSSitePath)
   var fileSystem: FileSystem = null
-  init() //initialize hadoop fileSystem
+  //init() //initialize hadoop fileSystem
 
   val fs = FileSystem.get(new URI("adl://yetiadls.azuredatalakestore.net"), conf)
+  init(fs) //initialize hadoop fileSystem
 
   def init(fs: FileSystem = null) = {
     if(null == fs){
