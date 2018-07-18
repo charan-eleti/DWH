@@ -1,21 +1,25 @@
 package com.yeti.dwh.edifice
 
+import java.text.SimpleDateFormat
+import java.util.Calendar
+
 import org.apache.log4j.{Level, Logger}
-import org.apache.spark.sql.{SaveMode, SparkSession}
 import org.apache.spark.sql.functions._
+import org.apache.spark.sql.{SaveMode, SparkSession}
 
 object edificeLoader{
   def main(args: Array[String]) {
     val inputPath = args(0)
     val processedPath = args(1)
     val hiveTablePath = args(2)
-    val backupPath = args(3)
+    //val backupPath = args(3)
+    val loadDateTime = new SimpleDateFormat("yyyy-MM-dd HH:MM:SS").format(Calendar.getInstance().getTime)
 
     //Usage: spark-submit edw_2.11-1.1.6.jar
-    // adl://yetiadls.azuredatalakestore.net/clusters/data/raw/edifice/staging/input/`date`
-    // adl://yetiadls.azuredatalakestore.net/clusters/data/raw/edifice/staging/output
-    // adl://yetiadls.azuredatalakestore.net/clusters/data/raw/edifice/test
-    // adl://yetiadls.azuredatalakestore.net/clusters/data/raw/edifice/archive
+    // inputPath = adl://yetiadls.azuredatalakestore.net/clusters/data/raw/edifice/input
+    // processedPath = adl://yetiadls.azuredatalakestore.net/clusters/data/raw/edifice/processed
+    // hiveTablePath = adl://yetiadls.azuredatalakestore.net/clusters/data/raw/edifice/target
+    // backupPath = adl://yetiadls.azuredatalakestore.net/clusters/data/raw/edifice/archive
 
     val spark = SparkSession.builder
       .master("local")
@@ -26,19 +30,19 @@ object edificeLoader{
     val rootLogger = Logger.getRootLogger()
     rootLogger.setLevel(Level.WARN)
     //val dataRecRDD = sc.wholeTextFiles(inputPath + "/*") //get files from input folder
-    val dataRecRDD = sc.wholeTextFiles(inputPath) //get files from input folder
+    val dataRecRDD = sc.wholeTextFiles(inputPath + "/*") //get files from input folder
     val data_rec = dataRecRDD.flatMap(x => edificeReport.parse(x))
     val dataRecDF = spark.createDataFrame(data_rec,edificeReport.schema)
     val dataRecLastUPDDF = dataRecDF.withColumn("lastUPD", from_unixtime(unix_timestamp(current_timestamp)))
     dataRecLastUPDDF.printSchema()
     dataRecLastUPDDF.show()
     //dataRecDF.write.partitionBy("retailer","year_day").format("csv").mode(SaveMode.Overwrite).option("retailer1", "retailer").save(args(1) + "/" + data_rec(0) + ".csv")
-
+/*
     dataRecDF.write.partitionBy("retailer","year_day")
       .format("com.databricks.spark.csv").mode(SaveMode.Overwrite)
       .option("header", "true")
       .save(args(1)) //save to processed folder
-
+*/
     dataRecDF.write.partitionBy("retailer","year_day")
       .option("header", "false")
       .mode(SaveMode.Overwrite)
@@ -49,7 +53,7 @@ object edificeLoader{
     HDFSUtil.deleteDirectory(processedPath + "/" + "_SUCCESS") // delete _SUCCESS file in processed folder
     println("<<<move child directories from processed folder to target directory")
     HDFSUtil.moveNestedDir(processedPath, hiveTablePath) //move child directories from processed folder to target directory
-    //HDFSUtil.moveNestedDir(inputPath, backupPath) //archive input files after processing for backup
+    //HDFSUtil.moveFileOrDir(inputPath, backupPath + "/loadDateTime=" + loadDateTime) //archive input files after processing for backup
     println(">>>End")
 
   }

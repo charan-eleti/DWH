@@ -1,6 +1,7 @@
-DROP TABLE IF EXISTS YETIDM.EDIFICE;
-CREATE TABLE IF NOT EXISTS YETIDM.EDIFICE
+DROP TABLE IF EXISTS EDW.EDIFICE;
+CREATE EXTERNAL TABLE IF NOT EXISTS EDW.EDIFICE
 (
+	ID STRING,
 	account	STRING,
 	upc	STRING,
 	storenumber	STRING,
@@ -10,17 +11,18 @@ CREATE TABLE IF NOT EXISTS YETIDM.EDIFICE
 	qu	INT,
 	xr	DOUBLE,
 	flag	CHAR(1),
-	loadDate	DATE
+	lastUPD	TIMESTAMP
 )
 PARTITIONED BY (Retailer STRING,year_day DATE)
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
 LINES TERMINATED BY '\n'
-STORED AS TEXTFILE;
+STORED AS TEXTFILE
+LOCATION 'adl://yetiadls.azuredatalakestore.net/clusters/data/raw/edifice/staging';
 
-
-INSERT OVERWRITE TABLE YETIDM.EDIFICE PARTITION(Retailer,year_day) 
-SELECT account,
+INSERT OVERWRITE TABLE EDW.EDIFICE PARTITION(Retailer,year_day) 
+SELECT CONCAT(cast(UPC as STRING), Retailer, CAST(weekending as STRING), CAST(Storenumber as STRING)) as ID,
+account,
 upc,
 storenumber,
 qs,
@@ -29,7 +31,8 @@ qr,
 qu,
 xr,
 flag,
-CURRENT_DATE AS loadDate,
+from_unixtime(unix_timestamp(CURRENT_TIMESTAMP)) AS lastUPD,
 Retailer,
 weekending AS year_day
 FROM DEFAULT.EDIFICE_STG;
+
