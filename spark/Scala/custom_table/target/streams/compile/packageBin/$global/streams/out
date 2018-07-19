@@ -1,0 +1,15 @@
+[0m[[0m[0minfo[0m] [0m[0mPackaging /Users/nick.narsaraopally/Documents/git/spark/Scala/custom_table/target/scala-2.11/custom_table_2.11-0.1.jar ...[0m
+[0m[[0m[0mdebug[0m] [0m[0mInput file mappings:[0m
+[0m[[0m[0mdebug[0m] [0m[0m	com/yeti/dwh[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /Users/nick.narsaraopally/Documents/git/spark/Scala/custom_table/target/scala-2.11/classes/com/yeti/dwh[0m
+[0m[[0m[0mdebug[0m] [0m[0m	com[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /Users/nick.narsaraopally/Documents/git/spark/Scala/custom_table/target/scala-2.11/classes/com[0m
+[0m[[0m[0mdebug[0m] [0m[0m	com/yeti/dwh/custom_table/TableGenerator$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /Users/nick.narsaraopally/Documents/git/spark/Scala/custom_table/target/scala-2.11/classes/com/yeti/dwh/custom_table/TableGenerator$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	com/yeti/dwh/custom_table[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /Users/nick.narsaraopally/Documents/git/spark/Scala/custom_table/target/scala-2.11/classes/com/yeti/dwh/custom_table[0m
+[0m[[0m[0mdebug[0m] [0m[0m	com/yeti/dwh/custom_table/TableGenerator.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /Users/nick.narsaraopally/Documents/git/spark/Scala/custom_table/target/scala-2.11/classes/com/yeti/dwh/custom_table/TableGenerator.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	com/yeti[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /Users/nick.narsaraopally/Documents/git/spark/Scala/custom_table/target/scala-2.11/classes/com/yeti[0m
+[0m[[0m[0minfo[0m] [0m[0mDone packaging.[0m
