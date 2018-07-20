@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="54b5c90f-5a3c-498f-aedb-6ff6db512160" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/hydra.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/HDFSUtil.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/edificeLoader.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/edificeReport.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../HDFSUtil.scala" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../edificeLoader.scala" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../edificeReport.scala" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../foo.txt" beforeDir="false" />
-    </list>
+    <list default="true" id="54b5c90f-5a3c-498f-aedb-6ff6db512160" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
     <ignored path="$PROJECT_DIR$/project/project/target/" />
@@ -30,10 +20,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="edificeLoader.scala" pinned="false" current-in-tab="true">
+      <file leaf-file-name="edificeLoader.scala" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/edificeLoader.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="451">
+            <state relative-caret-position="705">
               <caret line="55" lean-forward="true" selection-start-line="55" selection-end-line="55" />
               <folding>
                 <element signature="e#30#69#0" expanded="true" />
@@ -54,11 +44,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="HDFSUtil.scala" pinned="false" current-in-tab="false">
+      <file leaf-file-name="HDFSUtil.scala" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/HDFSUtil.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1204">
-              <caret line="147" lean-forward="true" selection-start-line="147" selection-end-line="147" />
+            <state relative-caret-position="450">
+              <caret line="107" column="7" lean-forward="true" selection-start-line="107" selection-start-column="7" selection-end-line="107" selection-end-column="7" />
               <folding>
                 <element signature="e#30#49#0" expanded="true" />
               </folding>
@@ -121,6 +111,14 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="scala" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="EDW" type="b2602c69:ProjectViewProjectNode" />
+              <item name="EDW" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="scala" type="462c0819:PsiDirectoryNode" />
+              <item name="edifice" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -254,6 +252,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="1938" height="1050" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -318,22 +317,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/HDFSUtil.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/edificeLoader.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1204">
-          <caret line="147" lean-forward="true" selection-start-line="147" selection-end-line="147" />
+        <state relative-caret-position="705">
+          <caret line="55" lean-forward="true" selection-start-line="55" selection-end-line="55" />
           <folding>
-            <element signature="e#30#49#0" expanded="true" />
+            <element signature="e#30#69#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/edificeLoader.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/HDFSUtil.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="451">
-          <caret line="55" lean-forward="true" selection-start-line="55" selection-end-line="55" />
+        <state relative-caret-position="450">
+          <caret line="107" column="7" lean-forward="true" selection-start-line="107" selection-start-column="7" selection-end-line="107" selection-end-column="7" />
           <folding>
-            <element signature="e#30#69#0" expanded="true" />
+            <element signature="e#30#49#0" expanded="true" />
           </folding>
         </state>
       </provider>
