@@ -53,7 +53,7 @@ object edificeReport {
       //remove header and footer from split file
       val withoutHeaderFooter = splitLine.filter(line => line != header).dropRight(1)
       // append retailer, Account, Year_day and Flag for each account
-      val accountLine = withoutHeaderFooter.map(x => retailer.trim + '|' + account.trim + '|' + year_day.trim + '|' + x + '|' + flag.trim)
+      val accountLine = withoutHeaderFooter.map(x => retailer.trim.toUpperCase + '|' + account.trim.toUpperCase + '|' + year_day.trim + '|' + x + '|' + flag.trim.toUpperCase)
       // file Name as Key in ReportMap
       val reportName = retailer + "_" + account + "_" + year_day
       for (line <- accountLine) {

@@ -1,6 +1,5 @@
 package com.yeti.dwh.edifice
 
-import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.{SaveMode, SparkSession}
 
@@ -22,13 +21,13 @@ object edificeLoader{
     val backupPath = args(3)
     //val loadDateTime = new SimpleDateFormat("yyyy-MM-dd HH:MM:SS").format(Calendar.getInstance().getTime)
     val spark = SparkSession.builder
-      .master("local")
+      //.master("local")
       .appName("edificeLoder")
       //.config("spark.sql.warehouse.dir", "file:///C:/temp")
       .getOrCreate()
     val sc = spark.sparkContext
-    val rootLogger = Logger.getRootLogger()
-    rootLogger.setLevel(Level.WARN)
+    //val rootLogger = Logger.getRootLogger()
+    //rootLogger.setLevel(Level.WARN)
     //val dataRecRDD = sc.wholeTextFiles(inputPath + "/*") //get files from input folder
     val dataRecRDD = sc.wholeTextFiles(inputPath + "/*") //get files from input folder
     val data_rec = dataRecRDD.flatMap(x => edificeReport.parse(x))

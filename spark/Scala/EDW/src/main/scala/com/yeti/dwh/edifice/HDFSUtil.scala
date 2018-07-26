@@ -4,7 +4,6 @@ import java.net.URI
 
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.{FileSystem, Path}
-import org.apache.log4j.{Level, Logger}
 
 object fsUtil {
   private val conf = new Configuration()
@@ -15,6 +14,7 @@ object fsUtil {
   var fileSystem: FileSystem = null
   val fs = FileSystem.get(new URI("adl://yetiadls.azuredatalakestore.net"), conf)
   init(fs) //initialize hadoop fileSystem
+  //init()
 
   def init(fs: FileSystem = null) = {
     if(null == fs){
@@ -128,8 +128,8 @@ object HDFSUtil{
     val backupPath = args(3)
     //val loadDateTime = new SimpleDateFormat("yyyy-MM-dd HH:MM:SS").format(Calendar.getInstance().getTime)
 
-    val rootLogger = Logger.getRootLogger()
-    rootLogger.setLevel(Level.WARN)
+    //val rootLogger = Logger.getRootLogger()
+    //rootLogger.setLevel(Level.WARN)
 
     println("<<<delete _SUCCESS file in processed folder " + processedPath)
     if(fsUtil.exists(processedPath + "/" + "_SUCCESS")) {
