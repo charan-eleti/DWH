@@ -2,23 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="54b5c90f-5a3c-498f-aedb-6ff6db512160" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/HDFSUtil.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/HDFSUtil.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/edificeLoader.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/edificeLoader.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/edificeReport.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/edificeReport.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/scala-2.11/classes/com/yeti/dwh/edifice/HDFSUtil$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.11/classes/com/yeti/dwh/edifice/HDFSUtil$.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/scala-2.11/classes/com/yeti/dwh/edifice/fsUtil$$anonfun$listDirectories$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.11/classes/com/yeti/dwh/edifice/fsUtil$$anonfun$listDirectories$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/scala-2.11/classes/com/yeti/dwh/edifice/fsUtil$$anonfun$listDirectories$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.11/classes/com/yeti/dwh/edifice/fsUtil$$anonfun$listDirectories$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/scala-2.11/classes/com/yeti/dwh/edifice/fsUtil$$anonfun$moveInputFiles$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.11/classes/com/yeti/dwh/edifice/fsUtil$$anonfun$moveInputFiles$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/scala-2.11/classes/com/yeti/dwh/edifice/fsUtil$$anonfun$moveNestedDir$1$$anonfun$apply$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.11/classes/com/yeti/dwh/edifice/fsUtil$$anonfun$moveNestedDir$1$$anonfun$apply$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/scala-2.11/classes/com/yeti/dwh/edifice/fsUtil$$anonfun$moveNestedDir$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.11/classes/com/yeti/dwh/edifice/fsUtil$$anonfun$moveNestedDir$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/scala-2.11/classes/com/yeti/dwh/edifice/fsUtil$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.11/classes/com/yeti/dwh/edifice/fsUtil$.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/scala-2.11/classes/com/yeti/dwh/edifice/fsUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.11/classes/com/yeti/dwh/edifice/fsUtil.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/scala-2.11/edw_2.11-1.1.6.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/streams/compile/compileIncSetup/$global/streams/inc_compile_2.11.zip" beforeDir="false" afterPath="$PROJECT_DIR$/target/streams/compile/compileIncSetup/$global/streams/inc_compile_2.11.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/streams/compile/compileIncremental/$global/streams/export" beforeDir="false" afterPath="$PROJECT_DIR$/target/streams/compile/compileIncremental/$global/streams/export" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/streams/compile/compileIncremental/$global/streams/out" beforeDir="false" afterPath="$PROJECT_DIR$/target/streams/compile/compileIncremental/$global/streams/out" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/streams/compile/packageBin/$global/streams/inputs" beforeDir="false" afterPath="$PROJECT_DIR$/target/streams/compile/packageBin/$global/streams/inputs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../sql/hive/edificeReport.hql.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../../sql/hive/edificeReport.hql.txt" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -41,8 +26,8 @@
       <file leaf-file-name="edificeLoader.scala" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/edificeLoader.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="303">
-              <caret line="25" column="55" selection-start-line="25" selection-start-column="55" selection-end-line="25" selection-end-column="55" />
+            <state relative-caret-position="390">
+              <caret line="27" column="31" selection-start-line="22" selection-start-column="4" selection-end-line="27" selection-end-column="31" />
               <folding>
                 <element signature="e#30#69#0" expanded="true" />
               </folding>
@@ -65,8 +50,8 @@
       <file leaf-file-name="HDFSUtil.scala" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/HDFSUtil.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="399">
-              <caret line="19" column="19" lean-forward="true" selection-start-line="19" selection-start-column="19" selection-end-line="19" selection-end-column="19" />
+            <state relative-caret-position="387">
+              <caret line="145" column="1" lean-forward="true" selection-start-line="145" selection-start-column="1" selection-end-line="145" selection-end-column="1" />
               <folding>
                 <element signature="e#30#49#0" expanded="true" />
               </folding>
@@ -92,7 +77,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="229" />
     <option name="y" value="-16" />
     <option name="width" value="1366" />
@@ -295,7 +280,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="-9" width="1938" height="1050" extended-state="6" />
+    <frame x="-9" y="-9" width="1938" height="1050" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" />
@@ -373,8 +358,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/edificeLoader.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="303">
-          <caret line="25" column="55" selection-start-line="25" selection-start-column="55" selection-end-line="25" selection-end-column="55" />
+        <state relative-caret-position="390">
+          <caret line="27" column="31" selection-start-line="22" selection-start-column="4" selection-end-line="27" selection-end-column="31" />
           <folding>
             <element signature="e#30#69#0" expanded="true" />
           </folding>
@@ -383,8 +368,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/HDFSUtil.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="399">
-          <caret line="19" column="19" lean-forward="true" selection-start-line="19" selection-start-column="19" selection-end-line="19" selection-end-column="19" />
+        <state relative-caret-position="387">
+          <caret line="145" column="1" lean-forward="true" selection-start-line="145" selection-start-column="1" selection-end-line="145" selection-end-column="1" />
           <folding>
             <element signature="e#30#49#0" expanded="true" />
           </folding>

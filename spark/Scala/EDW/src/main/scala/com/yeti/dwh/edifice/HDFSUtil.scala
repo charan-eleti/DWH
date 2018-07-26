@@ -130,7 +130,6 @@ object HDFSUtil{
 
     //val rootLogger = Logger.getRootLogger()
     //rootLogger.setLevel(Level.WARN)
-
     println("<<<delete _SUCCESS file in processed folder " + processedPath)
     if(fsUtil.exists(processedPath + "/" + "_SUCCESS")) {
         fsUtil.deleteDirectory(processedPath + "/" + "_SUCCESS") // delete _SUCCESS file in processed folder

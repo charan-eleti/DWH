@@ -55,3 +55,39 @@ from_unixtime(unix_timestamp(CURRENT_TIMESTAMP)) AS lastUPD,
 Retailer,
 weekending AS year_day
 FROM DEFAULT.EDIFICE_STG;
+
+
+DROP TABLE IF EXISTS EDW.EDIFICE_ORC;
+CREATE TABLE IF NOT EXISTS EDW.EDIFICE_ORC
+(
+	ID STRING,
+	account	STRING,
+	upc	STRING,
+	storenumber	STRING,
+	qs	INT,
+	qa	INT,
+	qr	INT,
+	qu	INT,
+	xr	DOUBLE,
+	flag	CHAR(1),
+	lastUPD	TIMESTAMP
+)
+PARTITIONED BY (Retailer STRING,year_day DATE)
+STORED AS ORC;
+
+
+INSERT OVERWRITE TABLE EDW.EDIFICE_ORC PARTITION(Retailer,year_day) 
+SELECT ID,
+account,
+upc,
+storenumber,
+qs,
+qa,
+qr,
+qu,
+xr,
+flag,
+lastUPD,
+Retailer,
+year_day
+FROM EDW.EDIFICE;
