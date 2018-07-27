@@ -1,0 +1,4 @@
+[error] C:\Users\areddy\GitHub\development\dwh\spark\Scala\EDW\src\main\scala\com\yeti\dwh\edifice\HDFSUtil.scala:139:11: com.yeti.dwh.edifice.fsUtil.type does not take parameters
+[error]     fsUtil(spark)
+[error]           ^
+[error] one error found

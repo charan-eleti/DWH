@@ -10,8 +10,8 @@ object edificeLoader{
       --master yarn \
       edw_2.11-1.1.6.jar \
       adl://yetiadls.azuredatalakestore.net/clusters/data/raw/edifice/input \
-      adl://yetiadls.azuredatalakestore.net/clusters/data/raw/edifice/output \
-      adl://yetiadls.azuredatalakestore.net/clusters/data/raw/edifice/staging \
+      adl://yetiadls.azuredatalakestore.net/clusters/data/raw/edifice/processed \
+      adl://yetiadls.azuredatalakestore.net/clusters/data/raw/edifice/target \
       adl://yetiadls.azuredatalakestore.net/clusters/data/raw/edifice/archive
 */
   def main(args: Array[String]) {
@@ -47,8 +47,22 @@ object edificeLoader{
       .mode(SaveMode.Overwrite)
       //.option("delimiter", ",")
       .csv(processedPath)//save to processed folder
-    println(">>> Edifice input files in " + inputPath + " have been processed and moved to folder " + processedPath)
-    println(">>>End")
+    println(">>> Edifice input files in " + inputPath + " have been processed and copied to folder " + processedPath)
+    println(">>>EdificeLoader Ends here")
+
+    println("<<<delete _SUCCESS file in processed folder " + processedPath)
+    if(HDFSUtil.exists(processedPath + "/" + "_SUCCESS")) {
+      HDFSUtil.deleteDirectory(processedPath + "/" + "_SUCCESS") // delete _SUCCESS file in processed folder
+    }
+    println("<<<move child directories from " + processedPath + " to " +  hiveTablePath)
+    HDFSUtil.moveNestedDir(processedPath, hiveTablePath) //move child directories from processed folder to target directory
+    //fsUtil.moveFileOrDir(inputPath, backupPath + "/loadDateTime=" + loadDateTime) //archive input files after processing for backup
+    println("<<<archive input files from " + inputPath + " to " +  backupPath)
+    HDFSUtil.moveInputFiles(inputPath, backupPath) //archive input files after processing for backup
+    println("<<<create inputFiles Directory " + inputPath)
+    HDFSUtil.createDirectory(inputPath) //create inputFiles Directory for delta loads
+    println(">>>HDFSUtil Ends here")
+
   }
 }
 

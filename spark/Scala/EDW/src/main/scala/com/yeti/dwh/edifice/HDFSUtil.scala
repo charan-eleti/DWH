@@ -5,12 +5,12 @@ import java.net.URI
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.{FileSystem, Path}
 
-object fsUtil {
+object HDFSUtil {
   private val conf = new Configuration()
-  //private val hdfsCoreSitePath = new Path("/etc/hadoop/conf/core-ste.xml")
-  //private val hdfsHDFSSitePath = new Path("/etc/hadoop/conf/hdfs-site.xml")
-  //conf.addResource(hdfsCoreSitePath)
-  //conf.addResource(hdfsHDFSSitePath)
+  private val hdfsCoreSitePath = new Path("/etc/hadoop/conf/core-ste.xml")
+  private val hdfsHDFSSitePath = new Path("/etc/hadoop/conf/hdfs-site.xml")
+  conf.addResource(hdfsCoreSitePath)
+  conf.addResource(hdfsHDFSSitePath)
   var fileSystem: FileSystem = null
   val fs = FileSystem.get(new URI("adl://yetiadls.azuredatalakestore.net"), conf)
   init(fs) //initialize hadoop fileSystem
@@ -109,7 +109,7 @@ object fsUtil {
     }
   }
 }
-
+/*
 object HDFSUtil{
   /* Usage:
   spark-submit --class com.yeti.dwh.edifice.HDFSUtil \
@@ -117,7 +117,7 @@ object HDFSUtil{
     --deploy-mode cluster \
     edw_2.11-1.1.6.jar \
     adl://yetiadls.azuredatalakestore.net/clusters/data/raw/edifice/input \
-    adl://yetiadls.azuredatalakestore.net/clusters/data/raw/edifice/output \
+    adl://yetiadls.azuredatalakestore.net/clusters/data/raw/edifice/processed \
     adl://yetiadls.azuredatalakestore.net/clusters/data/raw/edifice/target \
     adl://yetiadls.azuredatalakestore.net/clusters/data/raw/edifice/archive
   */
@@ -132,7 +132,7 @@ object HDFSUtil{
     //rootLogger.setLevel(Level.WARN)
     println("<<<delete _SUCCESS file in processed folder " + processedPath)
     if(fsUtil.exists(processedPath + "/" + "_SUCCESS")) {
-        fsUtil.deleteDirectory(processedPath + "/" + "_SUCCESS") // delete _SUCCESS file in processed folder
+      fsUtil.deleteDirectory(processedPath + "/" + "_SUCCESS") // delete _SUCCESS file in processed folder
     }
     println("<<<move child directories from " + processedPath + " to " +  hiveTablePath)
     fsUtil.moveNestedDir(processedPath, hiveTablePath) //move child directories from processed folder to target directory
@@ -143,4 +143,7 @@ object HDFSUtil{
     fsUtil.createDirectory(inputPath) //create inputFiles Directory for delta loads
     println(">>>End")
   }
+
 }
+*/
+

@@ -1,0 +1,4 @@
+[error] java.lang.RuntimeException: Nonzero exit code: 1
+[error] 	at sbt.Run$.executeTrapExit(Run.scala:124)
+[error] 	at sbt.Run.run(Run.scala:77)
+[error] 	at sbt.Defaults$.$anonfun$bgRunTask$5(Defaults.scala:1185)
