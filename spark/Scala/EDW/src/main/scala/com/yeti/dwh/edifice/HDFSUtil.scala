@@ -62,8 +62,6 @@ object HDFSUtil {
     list
   }
 
-
-
   //move files from source to target directory
   def moveFileOrDir(src: String, target: String): Unit = {
     val srcPath = new Path(src)

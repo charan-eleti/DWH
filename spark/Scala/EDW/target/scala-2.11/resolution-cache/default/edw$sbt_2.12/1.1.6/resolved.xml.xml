@@ -4,7 +4,7 @@
 		module="edw$sbt_2.12"
 		revision="1.1.6"
 		status="integration"
-		publication="20180718191022"
+		publication="20180803133029"
 	/>
 	<configurations>
 		<conf name="compile" visibility="public" description=""/>
