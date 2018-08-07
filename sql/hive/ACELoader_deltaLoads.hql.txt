@@ -1,0 +1,25 @@
+MSCK REPAIR TABLE edw_sales.ace_sell_thought;
+
+INSERT OVERWRITE TABLE edw_sales.ace_sell_thought_ORC PARTITION(year_day) 
+SELECT `Site`,
+`SiteDescription`,
+`Customer_#`,
+`Customer_Name`,
+`Address_Line_1`,
+`Address_Line_2`,
+`City`,
+`State`,
+`ZipCode`,
+`Business_Class`,
+`Format`,
+`Manufacturer_#`,
+`Manufacturer_Class_Code`,
+`Merchandise_Class`,
+`Product_Group`,
+`Article`,
+`Article_Name`,
+`Eaches_Item`,
+`Eaches_Cost`,
+`year_day`
+FROM edw_sales.ace_sell_thought;
+

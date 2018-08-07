@@ -1,0 +1,86 @@
+DROP TABLE IF EXISTS edw_sales.ace_sell_thought;
+CREATE EXTERNAL TABLE IF NOT EXISTS edw_sales.ace_sell_thought
+(
+	`Site` STRING,
+	`SiteDescription`	STRING,
+	`Customer_#`	STRING,
+	`Customer_Name`	STRING,
+	`Address_Line_1`	STRING,
+	`Address_Line_2` STRING,
+	`City`	STRING,
+	`State`	STRING,
+	`ZipCode`	STRING,
+	`Business_Class`	STRING,
+	`Format`	STRING,
+	`Manufacturer_#`	STRING,
+	`Manufacturer_Class_Code`	STRING,
+	`Merchandise_Class`	STRING,
+	`Product_Group`	STRING,
+	`Article`	STRING,
+	`Article_Name`	STRING,
+	`Eaches_Item`	STRING,
+	`Eaches_Cost`	STRING
+)
+PARTITIONED BY (year_day DATE)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE
+LOCATION 'adl://yetiadls.azuredatalakestore.net/clusters/data/03_transformed/ace';
+
+
+DROP TABLE IF EXISTS edw_sales.ace_sell_thought_ORC;
+CREATE TABLE IF NOT EXISTS edw_sales.ace_sell_thought_ORC
+(
+	`Site` STRING,
+	`SiteDescription`	STRING,
+	`Customer_#`	STRING,
+	`Customer_Name`	STRING,
+	`Address_Line_1`	STRING,
+	`Address_Line_2` STRING,
+	`City`	STRING,
+	`State`	STRING,
+	`ZipCode`	STRING,
+	`Business_Class`	STRING,
+	`Format`	STRING,
+	`Manufacturer_#`	STRING,
+	`Manufacturer_Class_Code`	STRING,
+	`Merchandise_Class`	STRING,
+	`Product_Group`	STRING,
+	`Article`	STRING,
+	`Article_Name`	STRING,
+	`Eaches_Item`	STRING,
+	`Eaches_Cost`	STRING
+)
+PARTITIONED BY (year_day DATE)
+STORED AS ORC;
+
+
+#####
+
+###incremental loads
+
+MSCK REPAIR TABLE edw_sales.ace_sell_thought;
+
+INSERT OVERWRITE TABLE edw_sales.ace_sell_thought_ORC PARTITION(year_day) 
+SELECT `Site`,
+`SiteDescription`,
+`Customer_#`,
+`Customer_Name`,
+`Address_Line_1`,
+`Address_Line_2`,
+`City`,
+`State`,
+`ZipCode`,
+`Business_Class`,
+`Format`,
+`Manufacturer_#`,
+`Manufacturer_Class_Code`,
+`Merchandise_Class`,
+`Product_Group`,
+`Article`,
+`Article_Name`,
+`Eaches_Item`,
+`Eaches_Cost`,
+`year_day`
+FROM edw_sales.ace_sell_thought;
