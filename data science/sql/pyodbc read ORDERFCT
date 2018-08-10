@@ -1,0 +1,29 @@
+query = """
+    WITH ORDER_DIM AS (
+        SELECT CustomerID, OrderDate, Requested_Date, OrderQty, UnitPrice, ProductID,
+        CASE WHEN 
+            Requested_Date < OrderDate THEN OrderDate ELSE Requested_Date
+        END AS Req_Date
+        FROM [EDW_DS].[ORDERFCT]
+        WHERE CustomerID IN ({})
+        AND RejectionReason IS NULL
+        AND SalesOffice IN ('STD','HYB')
+        AND Ordertype NOT IN ('ZARF','ZARM','ZEG2','ZERF','ZERM','ZRE')
+        AND SoldtoParty NOT IN ('91860','0000107894','0000114883','0000108654')
+        AND OrderQty > 0
+        AND Requested_Date >= '{}' AND Requested_Date <= '{}'
+    ), 
+    PRODUCT AS (
+        SELECT ProductID, ProductCategory, MasterSKU
+        FROM [EDW_DS].[PRODUCT_DIM]
+        WHERE ISCore = 'True'
+    ),
+    CUSTOMER AS (
+        SELECT CustomerID, Zipcode, SalesOffice
+        FROM [EDW_DS].[CUSTOMER_DIM]
+    )
+    SELECT ORDER_DIM.CustomerID, ORDER_DIM.OrderDate, ORDER_DIM.Req_Date AS Requested_Date, ORDER_DIM.OrderQty, ORDER_DIM.UnitPrice, PRODUCT.ProductCategory, PRODUCT.MasterSKU, Customer.Zipcode, Customer.SalesOffice
+    FROM ORDER_DIM
+    INNER JOIN PRODUCT ON PRODUCT.ProductID = ORDER_DIM.ProductID
+    INNER JOIN CUSTOMER ON CUSTOMER.CustomerID = ORDER_DIM.CustomerID
+    ORDER BY ORDER_DIM.OrderDate ASC;""".format(','.join(["'" + customer + "'" for customer in stable_list]), start_date, end_date)
