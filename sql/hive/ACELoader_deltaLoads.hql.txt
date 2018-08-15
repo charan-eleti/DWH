@@ -1,6 +1,6 @@
-MSCK REPAIR TABLE edw_sales.ace_sell_thought;
+MSCK REPAIR TABLE edw_sales.ace_sell_through;
 
-INSERT OVERWRITE TABLE edw_sales.ace_sell_thought_ORC PARTITION(year_day) 
+INSERT OVERWRITE TABLE edw_sales.ace_sell_through_ORC PARTITION(year_day) 
 SELECT `Site`,
 `SiteDescription`,
 `Customer_#`,
@@ -21,5 +21,4 @@ SELECT `Site`,
 `Eaches_Item`,
 `Eaches_Cost`,
 `year_day`
-FROM edw_sales.ace_sell_thought;
-
+FROM edw_sales.ace_sell_through;

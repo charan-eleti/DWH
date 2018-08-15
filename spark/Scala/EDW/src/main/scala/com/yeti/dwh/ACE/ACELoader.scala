@@ -1,5 +1,6 @@
-package com.yeti.dwh.ACE
+package com.yeti.dwh
 
+import com.yeti.dwh.ACE.HDFSUtil
 import org.apache.log4j._
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.{StringType, StructField, StructType}

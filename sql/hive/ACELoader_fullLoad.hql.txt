@@ -1,9 +1,9 @@
-DROP TABLE IF EXISTS edw_sales.ace_sell_thought;
-CREATE EXTERNAL TABLE IF NOT EXISTS edw_sales.ace_sell_thought
+DROP TABLE IF EXISTS edw_sales.ace_sell_through;
+CREATE EXTERNAL TABLE IF NOT EXISTS edw_sales.ace_sell_through
 (
 	`Site` STRING,
 	`SiteDescription`	STRING,
-	`Customer_#`	STRING,
+	`CustomerID`	STRING,
 	`Customer_Name`	STRING,
 	`Address_Line_1`	STRING,
 	`Address_Line_2` STRING,
@@ -12,7 +12,7 @@ CREATE EXTERNAL TABLE IF NOT EXISTS edw_sales.ace_sell_thought
 	`ZipCode`	STRING,
 	`Business_Class`	STRING,
 	`Format`	STRING,
-	`Manufacturer_#`	STRING,
+	`ManufacturerID`	STRING,
 	`Manufacturer_Class_Code`	STRING,
 	`Merchandise_Class`	STRING,
 	`Product_Group`	STRING,
@@ -22,15 +22,15 @@ CREATE EXTERNAL TABLE IF NOT EXISTS edw_sales.ace_sell_thought
 	`Eaches_Cost`	STRING
 )
 PARTITIONED BY (year_day DATE)
-ROW FORMAT DELIMITED
-FIELDS TERMINATED BY ','
-LINES TERMINATED BY '\n'
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+WITH SERDEPROPERTIES ("quoteChar"= "'")
 STORED AS TEXTFILE
 LOCATION 'adl://yetiadls.azuredatalakestore.net/clusters/data/03_transformed/ace';
 
 
-DROP TABLE IF EXISTS edw_sales.ace_sell_thought_ORC;
-CREATE TABLE IF NOT EXISTS edw_sales.ace_sell_thought_ORC
+
+DROP TABLE IF EXISTS edw_sales.ace_sell_through_ORC;
+CREATE TABLE IF NOT EXISTS edw_sales.ace_sell_through_ORC
 (
 	`Site` STRING,
 	`SiteDescription`	STRING,
@@ -60,9 +60,9 @@ STORED AS ORC;
 
 ###incremental loads
 
-MSCK REPAIR TABLE edw_sales.ace_sell_thought;
+MSCK REPAIR TABLE edw_sales.ace_sell_through;
 
-INSERT OVERWRITE TABLE edw_sales.ace_sell_thought_ORC PARTITION(year_day) 
+INSERT OVERWRITE TABLE edw_sales.ace_sell_through_ORC PARTITION(year_day) 
 SELECT `Site`,
 `SiteDescription`,
 `Customer_#`,
@@ -83,4 +83,4 @@ SELECT `Site`,
 `Eaches_Item`,
 `Eaches_Cost`,
 `year_day`
-FROM edw_sales.ace_sell_thought;
+FROM edw_sales.ace_sell_through;

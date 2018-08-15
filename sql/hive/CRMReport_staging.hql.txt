@@ -1,0 +1,79 @@
+
+Drop table if exists edw_rz.demandware_crm;
+CREATE EXTERNAL TABLE IF NOT EXISTS edw_rz.demandware_crm
+(
+      Email STRING
+    , OrderNumber STRING
+    , OrderStatus STRING
+    , Sku STRING
+    , Qty STRING
+    , UnitTotal STRING
+    , DiscountAmount STRING
+    , HeaderDiscount STRING
+    , OrderDate DATE
+    , CustomerId STRING
+    , AddressLine1 STRING
+    , AddressLine2 STRING
+    , City STRING
+    , State STRING
+    , ZipCode STRING
+    , Country STRING
+    , SalesGroup STRING
+    , ShippingMethodAtCheckout STRING
+    , LastModified TIMESTAMP
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE
+LOCATION 'adl://yetiadls.azuredatalakestore.net/clusters/data/01_raw/osf/CRMReport/01_stg'
+tblproperties ("skip.header.line.count"="1");
+
+
+Drop table if exists edw_rz.demandware_crm_incr;
+CREATE EXTERNAL TABLE IF NOT EXISTS edw_rz.demandware_crm_incr
+(
+      Email STRING
+    , OrderNumber STRING
+    , OrderStatus STRING
+    , Sku STRING
+    , Qty STRING
+    , UnitTotal STRING
+    , DiscountAmount STRING
+    , HeaderDiscount STRING
+    , OrderDate DATE
+    , CustomerId STRING
+    , AddressLine1 STRING
+    , AddressLine2 STRING
+    , City STRING
+    , State STRING
+    , ZipCode STRING
+    , Country STRING
+    , SalesGroup STRING
+    , ShippingMethodAtCheckout STRING
+    , LastModified TIMESTAMP
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE
+LOCATION 'adl://yetiadls.azuredatalakestore.net/clusters/data/01_raw/osf/CRMReport/02_incr'
+tblproperties ("skip.header.line.count"="1");
+
+
+Drop table if exists edw_rz.demandware_crm_temp;
+create table if not exists edw_rz.demandware_crm_temp as 
+SELECT * FROM (
+select * from edw_rz.demandware_crm_incr 
+UNION ALL 
+SELECT STG.* FROM edw_rz.demandware_crm STG LEFT OUTER JOIN edw_rz.demandware_crm_incr INCR ON STG.OrderNumber=INCR.OrderNumber and STG.Sku=INCR.Sku WHERE INCR.OrderNumber is null)x;
+
+
+Drop table if exists edw_rz.demandware_crm;
+ALTER TABLE edw_rz.demandware_crm_temp RENAME TO edw_rz.demandware_crm;
+
+
+Drop table if exists edw_tz.demandware_crm;
+CREATE TABLE edw_tz.demandware_crm STORED AS ORC AS 
+SELECT *, from_unixtime(unix_timestamp(current_timestamp)) AS lastUPD 
+FROM edw_rz.demandware_crm;

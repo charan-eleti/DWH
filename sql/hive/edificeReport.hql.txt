@@ -40,7 +40,7 @@ ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
 LINES TERMINATED BY '\n'
 STORED AS TEXTFILE
-LOCATION 'adl://yetiadls.azuredatalakestore.net/clusters/data/raw/edifice/target';
+LOCATION 'adl://yetiadls.azuredatalakestore.net/clusters/data/03_transformed/edifice';
 
 INSERT OVERWRITE TABLE EDW.EDIFICE PARTITION(Retailer,year_day) 
 SELECT CONCAT(cast(UPC as STRING), Retailer, CAST(weekending as STRING), CAST(Storenumber as STRING)) as ID,
