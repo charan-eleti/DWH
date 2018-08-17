@@ -295,8 +295,8 @@ def ols_monthly_smape_by_masterSKU(train, test, decimal=True, feature_list=['Pro
 
         X_test, Y_test = split_train_test(train, test, masterSKU=i, feature_list=feature_list)
         
-        smape[masterSKU], Y_pred[masterSKU] = ols(X_train_all, X_test, Y_train_all, Y_test,plot=False,
-                                                  by_masterSKU=True, decimal_smape=decimal)
+        smape[masterSKU], Y_pred[masterSKU] = ols(X_train_all, X_test, Y_train_all, Y_test, plot=False,
+                                                  by_masterSKU=True, return_values=True, decimal_smape=decimal)
  
         sys.stdout.write('\r'+"{0:.3%}".format(j/len(ENCODED_MASTERSKUS)))
         sys.stdout.flush()
@@ -635,7 +635,8 @@ def knn_monthly_smape_by_masterSKU(train, test, k, decimal=True, feature_list=['
         X_test, Y_test = split_train_test(train, test, masterSKU=i, feature_list=feature_list)
         
         smape[masterSKU], Y_pred[masterSKU] = knn(X_train_all, X_test, Y_train_all, Y_test, k=k, 
-                                                  plot=False, by_masterSKU=True, return_values=True, decimal_smape=decimal)
+                                                  plot=False, by_masterSKU=True,
+                                                  return_values=True, decimal_smape=decimal)
   
         sys.stdout.write('\r'+"{0:.3%}".format(j/len(ENCODED_MASTERSKUS)))
         sys.stdout.flush()
@@ -730,7 +731,7 @@ def find_optimal_tree(X_train, Y_train, tree_list=[100,150,200,250,300,350,400,4
     
     if plot:
         plot_oob_scores(tree_list, oob_list)
-    best_tree = (np.argmax(oob_list)+2)*50     # change this if tree_list is not default
+    best_tree = (np.argmax(oob_list)+2)*50      # change this if tree_list is not default
     
     return best_tree
 
@@ -785,10 +786,6 @@ def monthly_random_forest_by_masterSKU(train, test, tree=150, decimal=True, feat
     
     op = smape, Y_pred
     return op
-
-
-
-
 
 
 
