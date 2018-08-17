@@ -14,3 +14,6 @@ TimeSeries.ipynb = TimeSeries_py.py + TimeSeries_module_testing.ipynb
 3. TimeSeries_py.py: same as TimeSeries.ipynb. Used for calling in TimeSeries_module_testing.ipynb
 
 4. TimeSeries_module_testing.ipynb: without any functions. User can call all functions in TimeSeries.py.
+
+
+# Except TimeSeries_py.py, other coding files contain examples
