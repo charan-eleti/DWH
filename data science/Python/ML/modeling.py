@@ -66,6 +66,8 @@ def preprocess_data(data, frac, feature_list):
     return X, Y
 
 
+
+
 def split_train_test(train, test, frac=1, masterSKU=None, feature_list=['ProductCategory','MasterSKU','month','new_product','price_change','cluster']):
     
     """ return date-split train/test in np.float64 arrays """
@@ -89,7 +91,7 @@ def split_train_test(train, test, frac=1, masterSKU=None, feature_list=['Product
             print("features:", feature_list)
         else:
             op = X_test, Y_test
-            
+
     return op
 
 
@@ -107,7 +109,6 @@ def visualize_Y_distribution(Y, boxcox_transform=False):
     t = "Original response vector distribution"
     plt.hist(Y)
     plt.title(t)
-    #savefig('Y_distribution.png')
     
     
 def equal_variance_test(df):
@@ -122,7 +123,7 @@ def calculate_adj_r2(r2, n, p):
     return 1 - (1-r2)*(n-1)/(n-p-1)
 
 def smape(Y_test, Y_pred):
-    """ returns a percentage """
+    """ returns a percentage, NOT decimals """
     return np.mean(np.abs(Y_pred-Y_test)/((np.abs(Y_test)+np.abs(Y_pred))/2)) * 100
 
 def cross_val_smape(model, X_, Y_, fold=5, rand_seed=None):
@@ -195,7 +196,7 @@ def ols_ttest(X_train, Y_train, boxcox_transform=False):
     return result.summary()
 
 
-def ols(X_train, X_test, Y_train, Y_test, boxcox_transform=True, plot=True, by_masterSKU=False, return_values=False):
+def ols(X_train, X_test, Y_train, Y_test, boxcox_transform=True, plot=True, by_masterSKU=False, return_values=False, decimal_smape=False):
 
     """ Use this function for modeling with train/test split. Use ols_predict(X_train, Y_train) to predict future values """
     
@@ -220,6 +221,8 @@ def ols(X_train, X_test, Y_train, Y_test, boxcox_transform=True, plot=True, by_m
     # evaluate test performance
     rmse_test = np.sqrt(mean_squared_error(Y_test,Y_pred))
     smape_test = smape(Y_test, Y_pred)
+    if decimal_smape:
+        smape_test = smape_test / 100
     
     # plot residuals
     if plot:
@@ -242,7 +245,7 @@ def ols(X_train, X_test, Y_train, Y_test, boxcox_transform=True, plot=True, by_m
         
     return op
 
-def plot_residuals(Y_test, Y_pred, title):
+def plot_residuals(Y_test, Y_pred, title, save_fig=False):
     """ plot residuals of fit models """
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -252,12 +255,15 @@ def plot_residuals(Y_test, Y_pred, title):
     ax.set_title(title)
     residuals = Y_test - Y_pred
     ax.scatter(Y_pred, residuals, alpha=0.7)
-    # fig.savefig('residuals.png')
+    if save_fig:
+        fig.savefig('residuals.png')
+    
 
 def ols_by_masterSKU(train, test, return_values=False, feature_list=['ProductCategory','MasterSKU','month','new_product','price_change','cluster']):
  
     """ return per-masterSKU results in 2 dicts """
-    rmse, smape, Y_pred = {}, {}, {}
+    
+    rmse, smape = {}, {}
     X_train_all, X_test_all, Y_train_all, Y_test_all = split_train_test(train, test, feature_list=feature_list)
     
     j = 0
@@ -266,26 +272,41 @@ def ols_by_masterSKU(train, test, return_values=False, feature_list=['ProductCat
         
         X_test, Y_test = split_train_test(train, test, masterSKU=i, feature_list=feature_list)
         
-        if return_values:
-            smape[masterSKU], Y_pred[masterSKU] = ols(X_train_all, X_test, Y_train_all, Y_test,
-                                                    plot=False, by_masterSKU=True, return_values=True)
-        else:
-            rmse[masterSKU], smape[masterSKU] = ols(X_train_all, X_test, Y_train_all, Y_test,
-                                                    plot=False, by_masterSKU=True)
+        rmse[masterSKU], smape[masterSKU] = ols(X_train_all, X_test, Y_train_all, Y_test, plot=False, by_masterSKU=True)
   
         sys.stdout.write('\r'+"{0:.3%}".format(j/len(ENCODED_MASTERSKUS)))
         sys.stdout.flush()
         j += 1
         
-    if return_values:
-        op = rmse, smape
-    else:
-        op = smape, Y_pred
+    op = rmse, smape
     return op
 
 
+def ols_monthly_smape_by_masterSKU(train, test, decimal=True, feature_list=['ProductCategory','MasterSKU','month','new_product','price_change','cluster']):
+    
+    """ returns monthly SMAPE per master SKU in decimal """ 
+    
+    smape, Y_pred = {}, {}
+    X_train_all, X_test_all, Y_train_all, Y_test_all = split_train_test(train, test, feature_list=feature_list)
+    
+    j = 0
+    
+    for i, masterSKU in enumerate(ENCODED_MASTERSKUS):
 
-def polynomial_ols(X_train, X_test, Y_train, Y_test, d, boxcox_transform=True,plot=True,by_masterSKU=False,return_values=False):
+        X_test, Y_test = split_train_test(train, test, masterSKU=i, feature_list=feature_list)
+        
+        smape[masterSKU], Y_pred[masterSKU] = ols(X_train_all, X_test, Y_train_all, Y_test,plot=False,
+                                                  by_masterSKU=True, decimal_smape=decimal)
+ 
+        sys.stdout.write('\r'+"{0:.3%}".format(j/len(ENCODED_MASTERSKUS)))
+        sys.stdout.flush()
+        j += 1
+
+    op = smape, Y_pred
+    return op
+
+
+def polynomial_ols(X_train, X_test, Y_train, Y_test, d, boxcox_transform=True, plot=True, by_masterSKU=False, return_values=False, decimal_smape=False):
 
     """ Use this function for modeling with train/test split """
     """ Use polynomial_ols_predict(X_train, Y_train) to predict future values """
@@ -317,6 +338,8 @@ def polynomial_ols(X_train, X_test, Y_train, Y_test, d, boxcox_transform=True,pl
     # test performance 
     rmse_test = np.sqrt(mean_squared_error(Y_test,Y_pred))
     smape_test = smape(Y_test, Y_pred)
+    if decimal_smape:
+        smape_test = smape_test / 100
     
     # plot residuals
     if plot:
@@ -337,15 +360,14 @@ def polynomial_ols(X_train, X_test, Y_train, Y_test, d, boxcox_transform=True,pl
         
     if return_values:
         op = smape_test, Y_pred
-    
     return op
 
 
-def polynomial_ols_by_masterSKU(train, test, d, return_values=False, feature_list=['ProductCategory','MasterSKU','month','new_product','price_change','cluster']):
+def polynomial_ols_by_masterSKU(train, test, d, feature_list=['ProductCategory','MasterSKU','month','new_product','price_change','cluster']):
     
     """ return per-masterSKU results in 2 dicts """
     
-    rmse, smape, Y_pred = {}, {}, {}
+    rmse, smape = {}, {}
     X_train_all, X_test_all, Y_train_all, Y_test_all = split_train_test(train, test, feature_list=feature_list)
     
     j = 0
@@ -354,22 +376,38 @@ def polynomial_ols_by_masterSKU(train, test, d, return_values=False, feature_lis
         
         X_test, Y_test = split_train_test(train, test, masterSKU=i, feature_list=feature_list)
         
-        if return_values:
-            smape[masterSKU], Y_pred[masterSKU] = polynomial_ols(X_train_all, X_test, Y_train_all, Y_test,
-                                                           d=d, plot=False, by_masterSKU=True, return_values=True)
-        else:
-            rmse[masterSKU], smape[masterSKU] = polynomial_ols(X_train_all, X_test, Y_train_all, Y_test,
-                                                           d=d, plot=False, by_masterSKU=True)
+        rmse[masterSKU], smape[masterSKU] = polynomial_ols(X_train_all, X_test, Y_train_all, Y_test, d=d, plot=False, by_masterSKU=True)
         
         sys.stdout.write('\r'+"{0:.3%}".format(j/len(ENCODED_MASTERSKUS)))
         sys.stdout.flush()
         j += 1
     
-    if return_values:
-        op = rmse, smape
-    else:
-        op = smape, Y_pred
+    op = smape, Y_pred
+    return op
+
+
+
+def poly_ols_monthly_smape_by_masterSKU(train, test, d, decimal=True, feature_list=['ProductCategory','MasterSKU','month','new_product','price_change','cluster']):
+    
+    """ returns monthly SMAPE per master SKU by decimal value """ 
+    
+    smape, Y_pred = {}, {}
+    X_train_all, X_test_all, Y_train_all, Y_test_all = split_train_test(train, test, feature_list=feature_list)
+    
+    j = 0
+    
+    for i, masterSKU in enumerate(ENCODED_MASTERSKUS):
         
+        X_test, Y_test = split_train_test(train, test, masterSKU=i, feature_list=feature_list)
+        
+        smape[masterSKU], Y_pred[masterSKU] = polynomial_ols(X_train_all, X_test, Y_train_all, Y_test,
+                                                             d=d, plot=False, by_masterSKU=True, return_values=True, decimal_smape=decimal)
+            
+        sys.stdout.write('\r'+"{0:.3%}".format(j/len(ENCODED_MASTERSKUS)))
+        sys.stdout.flush()
+        j += 1
+        
+    op = smape, Y_pred
     return op
     
 
@@ -378,7 +416,7 @@ def polynomial_ols_by_masterSKU(train, test, d, return_values=False, feature_lis
 ######################## Weighted Least Square Regression ################################
 ##########################################################################################
 
-def wls(X_train, X_test, Y_train, Y_test, w=None, plot=True, boxcox_transform=True, by_masterSKU=False, return_values=False):
+def wls(X_train, X_test, Y_train, Y_test, w=None, plot=True, boxcox_transform=True, by_masterSKU=False, return_values=False, decimal_smape=False):
     
     """ Use this function for modeling with train/test split. Use wls_predict(X_train, Y_train) to predict future values """
     """ default w: more recent records = greater weights """
@@ -397,6 +435,8 @@ def wls(X_train, X_test, Y_train, Y_test, w=None, plot=True, boxcox_transform=Tr
     # evaluate test performance
     rmse_test = np.sqrt(mean_squared_error(Y_test, Y_pred))
     smape_test = smape(Y_test, Y_pred)
+    if decimal_smape:
+        smape_test = smape_test/100
     
     # plot residuals
     if plot:
@@ -418,7 +458,7 @@ def wls_by_masterSKU(train, test, w=None, feature_list=['ProductCategory','Maste
     
     """ return per-masterSKU results in 2 dicts """
     
-    rmse, smape, Y_pred = {}, {}, {}
+    rmse, smape = {}, {}
     X_train_all, X_test_all, Y_train_all, Y_test_all = split_train_test(train, test, feature_list=feature_list)
 
     j = 0
@@ -426,22 +466,39 @@ def wls_by_masterSKU(train, test, w=None, feature_list=['ProductCategory','Maste
         
         X_test, Y_test = split_train_test(train, test, masterSKU=i, feature_list=feature_list)
         
-        if return_values:
-            smape[masterSKU], Y_pred[masterSKU] = wls(X_train_all, X_test, Y_train_all, Y_test, w=w,
-                                                    plot=False, by_masterSKU=True, return_values=True)
-        else:
-            rmse[masterSKU], smape[masterSKU] = wls(X_train_all, X_test, Y_train_all, Y_test, w=w, 
-                                                    plot=False, by_masterSKU=True)
+        rmse[masterSKU], smape[masterSKU] = wls(X_train_all, X_test, Y_train_all, Y_test, w=w,
+                                                plot=False, by_masterSKU=True)
         
         sys.stdout.write('\r'+"{0:.3%}".format(j/len(ENCODED_MASTERSKUS)))
         sys.stdout.flush()
         j += 1
         
-    if return_values:
-        op = rmse, smape
-    else:
-        op = smape, Y_pred
+    op = rmse, smape
+    return op
 
+
+def wls_monthly_smape_by_masterSKU(train, test, w=None, decimal=False, feature_list=['ProductCategory','MasterSKU','month','new_product','price_change','cluster']):
+    
+    """ returns monthly SMAPE per master SKU """ 
+    
+    smape, Y_pred = {}, {}
+    X_train_all, X_test_all, Y_train_all, Y_test_all = split_train_test(train, test, feature_list=feature_list)
+    
+    j = 0
+    
+    for i, masterSKU in enumerate(ENCODED_MASTERSKUS):
+        
+        X_test, Y_test = split_train_test(train, test, masterSKU=i, feature_list=feature_list)
+        
+        smape[masterSKU], Y_pred[masterSKU] = wls(X_train_all, X_test, Y_train_all, Y_test, w=w,
+                                                  plot=False, by_masterSKU=True, return_values=True,
+                                                  decimal_smape=decimal)
+    
+        sys.stdout.write('\r'+"{0:.3%}".format(j/len(ENCODED_MASTERSKUS)))
+        sys.stdout.flush()
+        j += 1
+
+    op = smape, Y_pred
     return op
 
 
@@ -452,7 +509,7 @@ def wls_by_masterSKU(train, test, w=None, feature_list=['ProductCategory','Maste
 def knn_find_k(X_train, Y_train, lo=2, hi=70, step=1, boxcox_transform=True, return_best_k=True):
     
     """ find the optimal K using a sample of the training data set by best cross-validated RMSE on training data """
-    """ reduce run time: set step=2 or greater & use training data from split_train_test(frac=0.2) """
+    """ reduce run time: set step=2 or greater and use training data from split_train_test(frac=0.2) """
     
     X_train = StandardScaler().fit_transform(X_train)
     if boxcox_transform:
@@ -494,7 +551,7 @@ def knn_find_k(X_train, Y_train, lo=2, hi=70, step=1, boxcox_transform=True, ret
 
 
 
-def plot_knn_results(lo, hi, score_list, step=1):
+def plot_knn_results(lo, hi, score_list, step=1, save_fig=False):
     """ step param = knn_find_k(step) param """
     fig, ax = plt.subplots()
     X, Y = [k for k in range(lo, hi, step)], score_list
@@ -503,9 +560,11 @@ def plot_knn_results(lo, hi, score_list, step=1):
     ax.set_title("KNN regressor ({} <= k < {})".format(lo, hi))
     ax.set_xlabel("number of neighbors")
     ax.set_ylabel("scores")
-    # fig.savefig('knn_results.png')
+    if save_fig:
+        fig.savefig('knn_choose_k_results.png')
+        
 
-def knn(X_train, X_test, Y_train, Y_test, k, plot=True, boxcox_transform=True, by_masterSKU=False, return_values=False):
+def knn(X_train, X_test, Y_train, Y_test, k, plot=True, boxcox_transform=True, by_masterSKU=False, return_values=False, decimal_smape=False):
     
     """ Use this function for modeling with train/test split. Use knn_predict(X_train, Y_train) to predict future values """
     """ the model has already cross-validated on training data when selecting K """
@@ -519,6 +578,8 @@ def knn(X_train, X_test, Y_train, Y_test, k, plot=True, boxcox_transform=True, b
     # evaluate test performance
     rmse_test = np.sqrt(mean_squared_error(Y_test, Y_pred))
     smape_test = smape(Y_test, Y_pred)
+    if decimal_smape:
+        smape_test = smape_test / 100
 
     if plot:
         title = "KNN Regressor (K = {}) residuals\nBox-Cox transformation: {}".format(k,boxcox_transform)
@@ -529,7 +590,7 @@ def knn(X_train, X_test, Y_train, Y_test, k, plot=True, boxcox_transform=True, b
     else:
         op = model
         print("\n Test RMSE: {}, test SMAPE: {}%".format(rmse_test, smape_test))
-        
+    
     if return_values:
         op = smape_test, Y_pred
     
@@ -538,36 +599,49 @@ def knn(X_train, X_test, Y_train, Y_test, k, plot=True, boxcox_transform=True, b
 
 
 
-def knn_by_masterSKU(train, test, k, return_values=False, feature_list=['ProductCategory','MasterSKU','month','new_product','price_change','cluster']):
+def knn_by_masterSKU(train, test, k, feature_list=['ProductCategory','MasterSKU','month','new_product','price_change','cluster']):
 
     """ return per-masterSKU results in 2 dicts """
     
-    rmse, smape, Y_pred = {}, {}, {}
+    rmse, smape = {}, {}
     X_train_all, X_test_all, Y_train_all, Y_test_all = split_train_test(train, test, feature_list=feature_list)
-    
     j = 0
     
     for i, masterSKU in enumerate(ENCODED_MASTERSKUS):
         
         X_test, Y_test = split_train_test(train, test, masterSKU=i, feature_list=feature_list)
         
-        if return_values:
-            smape[masterSKU], Y_pred[masterSKU] = knn(X_train_all, X_test, Y_train_all, Y_test, k=k, 
-                                                    plot=False, by_masterSKU=True, return_values=True)
-        else:
-            rmse[masterSKU], smape[masterSKU] = knn(X_train_all, X_test, Y_train_all, Y_test, k=k, 
+        rmse[masterSKU], smape[masterSKU] = knn(X_train_all, X_test, Y_train_all, Y_test, k=k, 
                                                     plot=False, by_masterSKU=True)
         
         sys.stdout.write('\r'+"{0:.3%}".format(j/len(ENCODED_MASTERSKUS)))
         sys.stdout.flush()
         j += 1
         
-    if by_masterSKU:
-        op = rmse_test, smape_test
-    else:
-        op = model
-        print("\n Test RMSE: {}, test SMAPE: {}%".format(rmse_test,smape_test))
+    op = rmse_test, smape_test    
+    return op
+
+
+def knn_monthly_smape_by_masterSKU(train, test, k, decimal=True, feature_list=['ProductCategory','MasterSKU','month','new_product','price_change','cluster']):
+    
+    """ returns monthly SMAPE per master SKU """ 
+    
+    smape, Y_pred = {}, {}
+    X_train_all, X_test_all, Y_train_all, Y_test_all = split_train_test(train, test, feature_list=feature_list)
+    j = 0
+    
+    for i, masterSKU in enumerate(ENCODED_MASTERSKUS):
         
+        X_test, Y_test = split_train_test(train, test, masterSKU=i, feature_list=feature_list)
+        
+        smape[masterSKU], Y_pred[masterSKU] = knn(X_train_all, X_test, Y_train_all, Y_test, k=k, 
+                                                  plot=False, by_masterSKU=True, return_values=True, decimal_smape=decimal)
+  
+        sys.stdout.write('\r'+"{0:.3%}".format(j/len(ENCODED_MASTERSKUS)))
+        sys.stdout.flush()
+        j += 1
+        
+    op = smape, Y_pred
     return op
 
 
@@ -576,7 +650,7 @@ def knn_by_masterSKU(train, test, k, return_values=False, feature_list=['Product
 ##########################################################################################
 
 
-def random_forest(X_train, X_test, Y_train, Y_test, tree=150, plot=True, boxcox_transform=True, by_masterSKU=False, return_values=False):
+def random_forest(X_train, X_test, Y_train, Y_test, tree=150, plot=True, boxcox_transform=True, by_masterSKU=False, return_values=False, decimal_smape=False):
     
     """ Use this function for modeling with train/test split """ 
     """ Use random_forest_predict(X_train, Y_train) to predict future values """
@@ -609,9 +683,11 @@ def random_forest(X_train, X_test, Y_train, Y_test, tree=150, plot=True, boxcox_
     Y_pred = model.predict(X_test)
     rmse_test = np.sqrt(mean_squared_error(Y_test, Y_pred))
     smape_test = smape(Y_test, Y_pred)
+    if decimal_smape:
+        smape_test = smape_test / 100
     
     if plot:
-        title = "Random Forest ({} trees) residuals\nBox-Cox transformation: {}".format(tree,boxcox_transform)
+        title = "Random Forest ({} trees) residuals\nBox-Cox transformation: {}".format(tree, boxcox_transform)
         plot_residuals(Y_test, Y_pred, title)
     
     if by_masterSKU:
@@ -633,7 +709,7 @@ def plot_oob_scores(tree_list, score_list):
     ax4.set_title("Random forest estimated R2 per # of trees")
     ax4.set_xlabel("Number of trees")
     ax4.set_ylabel("Estimated R2")
-    # fig.savefig("rf_oob.pgn")
+    # fig4.savefig("rf_oob.pgn")
 
     
     
@@ -660,31 +736,60 @@ def find_optimal_tree(X_train, Y_train, tree_list=[100,150,200,250,300,350,400,4
 
 
     
-def random_forest_by_masterSKU(train, test, tree=150, return_values=False, feature_list=['ProductCategory','MasterSKU','month','new_product','price_change','cluster']):
+
+
+def random_forest_by_masterSKU(train, test, tree=150, feature_list=['ProductCategory','MasterSKU','month','new_product','price_change','cluster']):
 
     """ return per-masterSKU results in 2 dicts """
     
-    rmse, smape, Y_pred = {}, {}, {}
+    rmse, smape = {}, {}
     X_train_all, X_test_all, Y_train_all, Y_test_all = split_train_test(train, test, feature_list=feature_list)
     
     j = 0
+    
     for i, masterSKU in enumerate(ENCODED_MASTERSKUS):
         X_test, Y_test = split_train_test(train, test, masterSKU=i, feature_list=feature_list)
-        if return_values:
-            rmse[masterSKU], smape[masterSKU] = random_forest(X_train_all, X_test, Y_train_all, Y_test,
-                                                              tree=tree, plot=False, by_masterSKU=True, return_values=True)
-        else:
-            rmse[masterSKU], smape[masterSKU] = random_forest(X_train_all, X_test, Y_train_all, Y_test,
+        
+        rmse[masterSKU], smape[masterSKU] = random_forest(X_train_all, X_test, Y_train_all, Y_test,
                                                               tree=tree, plot=False, by_masterSKU=True)
+
         sys.stdout.write('\r'+"{0:.3%}".format(j/len(ENCODED_MASTERSKUS)))
         sys.stdout.flush()
         j += 1
     
-    if return_values:
-        op = smape, Y_pred
-    else:
-        op = rmse, smape
+    op = rmse, smape
     return op
+
+
+
+def monthly_random_forest_by_masterSKU(train, test, tree=150, decimal=True, feature_list=['ProductCategory','MasterSKU','month','new_product','price_change','cluster']):
+
+    """ return monthly SMAPE per masterSKU as decimals """
+    
+    smape, Y_pred = {}, {}
+    X_train_all, X_test_all, Y_train_all, Y_test_all = split_train_test(train, test, feature_list=feature_list)
+    
+    j = 0
+    
+    for i, masterSKU in enumerate(ENCODED_MASTERSKUS):
+        
+        X_test, Y_test = split_train_test(train, test, masterSKU=i, feature_list=feature_list)
+        
+        rmse[masterSKU], smape[masterSKU] = random_forest(X_train_all, X_test, Y_train_all, Y_test,
+                                                          tree=tree, plot=False, by_masterSKU=True,
+                                                          return_values=True, decimal_smape=decimal)
+    
+        sys.stdout.write('\r'+"{0:.3%}".format(j/len(ENCODED_MASTERSKUS)))
+        sys.stdout.flush()
+        j += 1
+    
+    op = smape, Y_pred
+    return op
+
+
+
+
+
 
 
 ##########################################################################################

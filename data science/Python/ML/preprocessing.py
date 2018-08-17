@@ -86,7 +86,7 @@ def get_customer_dim(train, stable_list):
     for i in range(1,len(stable_list)):
         customer_id = stable_list[i]
         geo = train.loc[(train['CustomerID']==customer_id), ['CustomerID','Zipcode','SalesOffice']].head(1)
-        customer_dim = pd.concat([customer_dim,geo], ignore_index=True, sort=False, copy=False)
+        customer_dim = pd.concat([customer_dim,geo], ignore_index=True, copy=False)
     
     return customer_dim
 
