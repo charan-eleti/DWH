@@ -1,0 +1,16 @@
+2018 Data science intern projects -- Demand Forecasting for Standard Dealer
+
+1. Time series_details.ipynb: this program contains all details in this project. User can add some MasterSKU or combine several MasterSKU
+   together (DIY)
+
+2. TimeSeries.ipynb: All functions have been combined together, just following the example in the front of this program
+
+  
+
+TimeSeries.ipynb = TimeSeries_py.py + TimeSeries_module_testing.ipynb
+
+
+
+3. TimeSeries_py.py: same as TimeSeries.ipynb. Used for calling in TimeSeries_module_testing.ipynb
+
+4. TimeSeries_module_testing.ipynb: without any functions. User can call all functions in TimeSeries.py.
