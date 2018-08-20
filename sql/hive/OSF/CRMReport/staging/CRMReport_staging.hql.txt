@@ -26,7 +26,7 @@ ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
 LINES TERMINATED BY '\n'
 STORED AS TEXTFILE
-LOCATION 'adl://yetiadls.azuredatalakestore.net/clusters/data/01_raw/osf/CRMReport/01_stg'
+LOCATION 'adl://yetiadls.azuredatalakestore.net/clusters/data/02_staging/osf/CRMReport/01_stg'
 tblproperties ("skip.header.line.count"="1");
 
 
@@ -57,7 +57,7 @@ ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
 LINES TERMINATED BY '\n'
 STORED AS TEXTFILE
-LOCATION 'adl://yetiadls.azuredatalakestore.net/clusters/data/01_raw/osf/CRMReport/02_incr'
+LOCATION 'adl://yetiadls.azuredatalakestore.net/clusters/data/02_staging/osf/CRMReport/01_incr'
 tblproperties ("skip.header.line.count"="1");
 
 

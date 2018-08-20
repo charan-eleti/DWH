@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="54b5c90f-5a3c-498f-aedb-6ff6db512160" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/com/yeti/dwh/ACELoader.scala" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../sql/hive/ACELoader_deltaLoads.hql.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../../sql/hive/ACELoader_deltaLoads.hql.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../sql/hive/ACELoader_fullLoad.hql.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../../sql/hive/ACELoader_fullLoad.hql.txt" afterDir="false" />
-    </list>
+    <list default="true" id="54b5c90f-5a3c-498f-aedb-6ff6db512160" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
     <ignored path="$PROJECT_DIR$/project/project/target/" />
@@ -25,11 +20,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="edificeLoader.scala" pinned="false" current-in-tab="true">
+      <file leaf-file-name="edificeLoader.scala" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/edificeLoader.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="117">
-              <caret line="34" column="107" lean-forward="true" selection-start-line="34" selection-start-column="59" selection-end-line="34" selection-end-column="107" />
+            <state relative-caret-position="222">
+              <caret line="39" column="37" lean-forward="true" selection-start-line="39" selection-start-column="37" selection-end-line="39" selection-end-column="37" />
               <folding>
                 <element signature="e#30#69#0" expanded="true" />
               </folding>
@@ -49,11 +44,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="HDFSUtil.scala" pinned="false" current-in-tab="false">
+      <file leaf-file-name="HDFSUtil.scala" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/ACE/HDFSUtil.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="261">
-              <caret line="96" column="41" selection-start-line="96" selection-start-column="35" selection-end-line="96" selection-end-column="41" />
+            <state relative-caret-position="2142">
+              <caret line="102" column="16" lean-forward="true" selection-start-line="102" selection-start-column="16" selection-end-line="102" selection-end-column="16" />
               <folding>
                 <element signature="e#26#45#0" expanded="true" />
               </folding>
@@ -326,7 +321,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="-9" width="1938" height="1050" extended-state="7" />
+    <frame x="-9" y="-9" width="1938" height="1050" extended-state="6" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -337,10 +332,10 @@
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50053704" side_tool="true" weight="0.32919955" />
       <window_info anchor="right" id="Maven Projects" order="3" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49946293" visible="true" weight="0.32919955" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49946293" weight="0.32919955" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Designer" order="2" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20891514" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20891514" />
       <window_info anchor="bottom" id="sbt-shell-toolwindow" order="7" />
       <window_info anchor="bottom" id="Build" order="7" sideWeight="0.49946293" weight="0.32919955" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -500,22 +495,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/ACE/HDFSUtil.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/edificeLoader.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="261">
-          <caret line="96" column="41" selection-start-line="96" selection-start-column="35" selection-end-line="96" selection-end-column="41" />
+        <state relative-caret-position="222">
+          <caret line="39" column="37" lean-forward="true" selection-start-line="39" selection-start-column="37" selection-end-line="39" selection-end-column="37" />
           <folding>
-            <element signature="e#26#45#0" expanded="true" />
+            <element signature="e#30#69#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/edificeLoader.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/ACE/HDFSUtil.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="117">
-          <caret line="34" column="107" lean-forward="true" selection-start-line="34" selection-start-column="59" selection-end-line="34" selection-end-column="107" />
+        <state relative-caret-position="2142">
+          <caret line="102" column="16" lean-forward="true" selection-start-line="102" selection-start-column="16" selection-end-line="102" selection-end-column="16" />
           <folding>
-            <element signature="e#30#69#0" expanded="true" />
+            <element signature="e#26#45#0" expanded="true" />
           </folding>
         </state>
       </provider>
