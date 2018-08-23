@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="54b5c90f-5a3c-498f-aedb-6ff6db512160" name="Default" comment="" />
+    <list default="true" id="54b5c90f-5a3c-498f-aedb-6ff6db512160" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/../../../sql/hive/OSF/CRMReport/staging/CRMReport_staging.hql.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../../sql/hive/OSF/CRMReport/staging/CRMReport_staging.hql.txt" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
     <ignored path="$PROJECT_DIR$/project/project/target/" />
@@ -23,8 +25,8 @@
       <file leaf-file-name="edificeLoader.scala" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/edificeLoader.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="222">
-              <caret line="39" column="37" lean-forward="true" selection-start-line="39" selection-start-column="37" selection-end-line="39" selection-end-column="37" />
+            <state relative-caret-position="798">
+              <caret line="39" column="37" selection-start-line="39" selection-start-column="37" selection-end-line="39" selection-end-column="37" />
               <folding>
                 <element signature="e#30#69#0" expanded="true" />
               </folding>
@@ -35,7 +37,7 @@
       <file leaf-file-name="edificeReport.scala" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/edificeReport.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="138">
+            <state relative-caret-position="1764">
               <caret line="90" column="84" selection-start-line="90" selection-start-column="4" selection-end-line="90" selection-end-column="84" />
               <folding>
                 <element signature="e#30#63#0" expanded="true" />
@@ -47,8 +49,8 @@
       <file leaf-file-name="HDFSUtil.scala" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/ACE/HDFSUtil.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2142">
-              <caret line="102" column="16" lean-forward="true" selection-start-line="102" selection-start-column="16" selection-end-line="102" selection-end-column="16" />
+            <state relative-caret-position="637">
+              <caret line="95" column="65" selection-start-line="95" selection-start-column="65" selection-end-line="95" selection-end-column="65" />
               <folding>
                 <element signature="e#26#45#0" expanded="true" />
               </folding>
@@ -105,7 +107,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -161,7 +163,7 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -322,33 +324,34 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="1938" height="1050" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="SBT Console" order="7" />
-      <window_info anchor="bottom" id="Messages" order="7" />
       <window_info anchor="right" id="sbt" order="3" />
       <window_info anchor="right" id="Palette&#9;" order="3" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50053704" side_tool="true" weight="0.32919955" />
       <window_info anchor="right" id="Maven Projects" order="3" />
-      <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49946293" weight="0.32919955" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Designer" order="2" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20891514" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21213749" />
       <window_info anchor="bottom" id="sbt-shell-toolwindow" order="7" />
-      <window_info anchor="bottom" id="Build" order="7" sideWeight="0.49946293" weight="0.32919955" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="2" />
-      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.24973147" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Build" order="7" sideWeight="0.49946293" weight="0.32919955" />
       <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Messages" order="7" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -366,11 +369,40 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/edificeLoader.scala">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="819">
+          <caret line="39" column="37" lean-forward="true" selection-start-line="39" selection-start-column="37" selection-end-line="39" selection-end-column="37" />
+          <folding>
+            <element signature="e#30#69#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/edificeReport.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1890">
+          <caret line="90" column="84" selection-start-line="90" selection-start-column="4" selection-end-line="90" selection-end-column="84" />
+          <folding>
+            <element signature="e#30#63#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/ACE/HDFSUtil.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2142">
+          <caret line="102" column="16" lean-forward="true" selection-start-line="102" selection-start-column="16" selection-end-line="102" selection-end-column="16" />
+          <folding>
+            <element signature="e#26#45#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/edificeLoader.scala">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="231">
           <caret line="11" column="67" selection-start-line="11" selection-start-column="67" selection-end-line="11" selection-end-column="67" />
           <folding>
             <element signature="e#30#69#0" expanded="true" />
-            <element signature="e#148#3383#0" />
           </folding>
         </state>
       </provider>
@@ -389,9 +421,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2499">
           <caret line="119" column="77" selection-start-line="119" selection-start-column="77" selection-end-line="119" selection-end-column="77" />
-          <folding>
-            <element signature="e#30#49#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -405,89 +434,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/test" />
     <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/sparkTest.scala" />
-    <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/ACELoader.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42">
-          <caret line="2" column="7" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/ACE/satisfaction.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="441">
-          <caret line="21" column="36" lean-forward="true" selection-end-line="84" />
-          <folding>
-            <element signature="e#26#62#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/ACELoader.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="16" column="29" selection-start-line="16" selection-start-column="29" selection-end-line="16" selection-end-column="29" />
-          <folding>
-            <element signature="e#26#79#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/ACELoader.scala" />
+    <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/ACE/satisfaction.scala" />
+    <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/ACELoader.scala" />
     <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/HDFSUtil.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="336">
           <caret line="16" column="10" lean-forward="true" selection-end-line="147" />
-          <folding>
-            <element signature="e#30#49#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/ACE/satisfaction.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="12" column="21" lean-forward="true" selection-end-line="80" />
-          <folding>
-            <element signature="e#26#51#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/ACE/test.sc">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/ACELoader.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="8" column="7" selection-start-line="8" selection-start-column="7" selection-end-line="8" selection-end-column="7" />
-          <folding>
-            <element signature="e#22#54#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/ACELoader.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="5" column="7" selection-start-line="5" selection-start-column="7" selection-end-line="5" selection-end-column="7" />
-          <folding>
-            <element signature="e#22#67#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/ACEReport.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="409">
-          <caret line="21" column="33" selection-start-line="21" selection-start-column="33" selection-end-line="21" selection-end-column="33" />
-          <folding>
-            <element signature="e#22#55#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/ACE/satisfaction.scala" />
+    <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/ACE/test.sc" />
+    <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/ACELoader.scala" />
+    <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/ACELoader.scala" />
+    <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/ACEReport.scala" />
     <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/edificeReport.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="138">
+        <state relative-caret-position="1764">
           <caret line="90" column="84" selection-start-line="90" selection-start-column="4" selection-end-line="90" selection-end-column="84" />
           <folding>
             <element signature="e#30#63#0" expanded="true" />
@@ -497,8 +461,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/edifice/edificeLoader.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="222">
-          <caret line="39" column="37" lean-forward="true" selection-start-line="39" selection-start-column="37" selection-end-line="39" selection-end-column="37" />
+        <state relative-caret-position="798">
+          <caret line="39" column="37" selection-start-line="39" selection-start-column="37" selection-end-line="39" selection-end-column="37" />
           <folding>
             <element signature="e#30#69#0" expanded="true" />
           </folding>
@@ -507,8 +471,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/com/yeti/dwh/ACE/HDFSUtil.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2142">
-          <caret line="102" column="16" lean-forward="true" selection-start-line="102" selection-start-column="16" selection-end-line="102" selection-end-column="16" />
+        <state relative-caret-position="637">
+          <caret line="95" column="65" selection-start-line="95" selection-start-column="65" selection-end-line="95" selection-end-column="65" />
           <folding>
             <element signature="e#26#45#0" expanded="true" />
           </folding>

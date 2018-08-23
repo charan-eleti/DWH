@@ -1,0 +1,19 @@
+Drop table if exists edw_rz.demandware_customergroupreport_temp;
+create table if not exists edw_rz.demandware_customergroupreport_temp as 
+SELECT * FROM (
+select * from edw_rz.demandware_customergroupreport_incr 
+UNION ALL 
+SELECT STG.* FROM edw_rz.demandware_customergroupreport STG 
+LEFT OUTER JOIN 
+edw_rz.demandware_customergroupreport_incr INCR ON STG.CustomerNumber=INCR.CustomerNumber AND STG.CustomerGroup=INCR.CustomerGroup
+WHERE INCR.FirstName is null)x;
+
+
+Drop table if exists edw_rz.demandware_customergroupreport;
+ALTER TABLE edw_rz.demandware_customergroupreport_temp RENAME TO edw_rz.demandware_customergroupreport;
+
+
+Drop table if exists edw_tz.demandware_customergroupreport;
+CREATE TABLE edw_tz.demandware_customergroupreport STORED AS ORC AS 
+SELECT *, from_unixtime(unix_timestamp(current_timestamp)) AS lastUPD 
+FROM edw_rz.demandware_customergroupreport;

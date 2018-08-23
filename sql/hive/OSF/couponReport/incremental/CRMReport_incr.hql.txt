@@ -1,0 +1,19 @@
+Drop table if exists edw_rz.demandware_coupon_temp;
+create table if not exists edw_rz.demandware_coupon_temp as 
+SELECT * FROM (
+select * from edw_rz.demandware_coupon_incr 
+UNION ALL 
+SELECT STG.* FROM edw_rz.demandware_coupon STG 
+LEFT OUTER JOIN 
+edw_rz.demandware_coupon_incr INCR ON STG.OrderID=INCR.OrderID 
+WHERE INCR.SKU is null)x;
+
+
+Drop table if exists edw_rz.demandware_coupon;
+ALTER TABLE edw_rz.demandware_coupon_temp RENAME TO edw_rz.demandware_coupon;
+
+
+Drop table if exists edw_tz.demandware_coupon;
+CREATE TABLE edw_tz.demandware_coupon STORED AS ORC AS 
+SELECT *, from_unixtime(unix_timestamp(current_timestamp)) AS lastUPD 
+FROM edw_rz.demandware_coupon;

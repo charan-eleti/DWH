@@ -22,11 +22,10 @@ CREATE EXTERNAL TABLE IF NOT EXISTS edw_rz.demandware_crm
     , ShippingMethodAtCheckout STRING
     , LastModified TIMESTAMP
 )
-ROW FORMAT DELIMITED
-FIELDS TERMINATED BY ','
-LINES TERMINATED BY '\n'
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+WITH SERDEPROPERTIES ("quoteChar"= '"')
 STORED AS TEXTFILE
-LOCATION 'adl://yetiadls.azuredatalakestore.net/clusters/data/02_staging/osf/CRMReport/01_stg'
+LOCATION 'adl://yetiadls.azuredatalakestore.net/clusters/data/02_staging/osf/crmreport/01_stg'
 tblproperties ("skip.header.line.count"="1");
 
 
@@ -53,11 +52,10 @@ CREATE EXTERNAL TABLE IF NOT EXISTS edw_rz.demandware_crm_incr
     , ShippingMethodAtCheckout STRING
     , LastModified TIMESTAMP
 )
-ROW FORMAT DELIMITED
-FIELDS TERMINATED BY ','
-LINES TERMINATED BY '\n'
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+WITH SERDEPROPERTIES ("quoteChar"= '"')
 STORED AS TEXTFILE
-LOCATION 'adl://yetiadls.azuredatalakestore.net/clusters/data/02_staging/osf/CRMReport/01_incr'
+LOCATION 'adl://yetiadls.azuredatalakestore.net/clusters/data/02_staging/osf/crmreport/02_incr'
 tblproperties ("skip.header.line.count"="1");
 
 
@@ -66,7 +64,10 @@ create table if not exists edw_rz.demandware_crm_temp as
 SELECT * FROM (
 select * from edw_rz.demandware_crm_incr 
 UNION ALL 
-SELECT STG.* FROM edw_rz.demandware_crm STG LEFT OUTER JOIN edw_rz.demandware_crm_incr INCR ON STG.OrderNumber=INCR.OrderNumber and STG.Sku=INCR.Sku WHERE INCR.OrderNumber is null)x;
+SELECT STG.* FROM edw_rz.demandware_crm STG 
+LEFT OUTER JOIN 
+edw_rz.demandware_crm_incr INCR ON STG.OrderNumber=INCR.OrderNumber and STG.Sku=INCR.Sku 
+WHERE INCR.OrderNumber is null)x;
 
 
 Drop table if exists edw_rz.demandware_crm;
