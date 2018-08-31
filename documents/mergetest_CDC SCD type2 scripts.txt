@@ -1,0 +1,165 @@
+drop table if exists mergetest_final;
+create table mergetest_final as
+SELECT m.id,m.val,m.lastmod,case when m.flag=s.flag then 'Y' else m.flag end
+from mergetest m left outer join mergetest_delete s on m.id=s.id;
+
+//this is for daily incremental loads for hive history tables
+drop table if exists mergetest_final;
+create table mergetest_final as
+select distinct x.* from (SELECT m.id
+,m.val
+,m.lastmod
+,(case when m.flag=s.flag then 'Y' else m.flag end) as flag
+,(case when i.lastmod>m.lastmod then i.lastmod end) as enddate
+from mergetest m left outer join mergetest_delete s on m.id=s.id
+left outer join mergetest_incr i on m.id=i.id
+union all select * from mergetest_incr)x;
+
+
+
+//this is for daily incremental loads for hive tables
+select x.* from (SELECT m.id
+,m.val
+,m.lastmod
+,(case when m.flag=s.flag then 'Y' else m.flag end) as flag
+,(case when i.lastmod>m.lastmod then i.lastmod end) as enddate
+from mergetest m left outer join mergetest_delete s on m.id=s.id
+left outer join mergetest_incr i on m.id=i.id
+union all select * from mergetest_incr)x where x.enddate is null AND x.flag='N';
+
+
+//Handling deletes ONLY
+SELECT m.id
+,m.val
+,m.lastmod
+,(case when m.flag=s.flag then 'Y' else m.flag end) as flag
+from mergetest m left outer join mergetest_delete s on m.id=s.id;
+
+drop table if exists mergetest_final1;
+create table mergetest_final1 as
+SELECT m.id
+,m.val
+,m.lastmod
+,(case when m.flag=s.flag then 'Y' else m.flag end) as flag
+,(case when i.lastmod>m.lastmod then i.lastmod end) as enddate
+from mergetest_final1 m left outer join mergetest_delete s on m.id=s.id
+left outer join mergetest_incr i on m.id=i.id where i.id is null
+union all select * from mergetest_incr;
+
+
+select distinct x.* from (SELECT m.id
+,m.val
+,m.lastmod
+,(case when m.flag=s.flag then m.flag else 'Y' end) as flag
+,(case when m.lastmod<i.lastmod and m.enddate is NULL then i.lastmod end) as enddate
+from mergetest m left outer join mergetest_stg s on m.id=s.id
+left outer join mergetest_incr i on m.id=i.id
+union all select * from mergetest_incr)x;
+
+
+
+
+SELECT m.id
+,m.val
+,m.lastmod
+,(case when m.flag=s.flag then m.flag else 'Y' end) as flag
+,(case when m.lastmod<i.lastmod then (case when m.enddate is NULL then i.lastmod else end) as enddate
+from mergetest_final m left outer join mergetest_stg s on m.id=s.id
+left outer join mergetest_new i on m.id=i.id
+union all select * from mergetest_new;
+
+
+SELECT m.id
+,m.val
+,m.lastmod
+,(case when s.id is not null then null else 'YES' end) as flag
+,(case when m.enddate is NULL then i.lastmod else m.enddate end) as enddate
+from mergetest m left outer join mergetest_stg s on m.id=s.id
+left outer join mergetest_new i on m.id=i.id
+union all select * from mergetest_new;
+
+
+select x.* from (SELECT m.id
+,m.val
+,m.lastmod
+,(case when s.id is not null then null else 'YES' end) as flag
+,(case when m.enddate is NULL then i.lastmod else m.enddate end) as enddate
+from mergetest m left outer join mergetest_stg s on m.id=s.id
+left outer join mergetest_new i on m.id=i.id
+union all select * from mergetest_new)x where x.enddate is null and x.flag is null;
+
+
+INSERT OVERWRITE TABLE mergetest
+select distinct * from (SELECT m.id
+,m.val
+,m.lastmod
+,m.flag
+,(case when m.lastmod<i.lastmod then i.lastmod else (case when m.lastmod=i.lastmod then null end) end) as enddate
+from mergetest m left outer join mergetest_new i on m.id=i.id
+union all select * from mergetest_new)x;
+
+INSERT OVERWRITE TABLE mergetest
+SELECT m.id
+,m.val
+,m.lastmod
+,m.flag
+,(case when m.enddate is NULL then i.lastmod else (case when m.lastmod=i.lastmod then null end) end) as enddate
+from mergetest m left outer join mergetest_new i on m.id=i.id
+union all select * from mergetest_new;
+
+
+SELECT m.id
+,m.val
+,m.lastmod
+,(case when s.id is not null then FALSE else TRUE end) as flag
+,(case when m.enddate is NULL then i.lastmod else m.enddate end) as enddate
+from mergetest m left outer join mergetest_stg s on m.id=s.id
+left outer join mergetest_new i on m.id=i.id
+union all select * from mergetest_new;
+
+
+INSERT OVERWRITE TABLE mergetest
+SELECT m.id
+,m.val
+,m.lastmod
+,m.flag
+,(case when m.enddate is NULL then i.lastmod else m.enddate end) as enddate
+from mergetest m left outer join mergetest_new i on m.id=i.id
+union all select * from mergetest_new;
+
+drop TABLE mergetest_final;
+create TABLE mergetest_final as 
+select distinct x.* from (SELECT m.*
+,false as flag
+,(case when m.lastmod<i.lastmod then i.lastmod else (case when m.lastmod=i.lastmod then null end) end) as enddate
+from mergetest1 m left outer join mergetest1_new i on m.id=i.id
+union all select i.*,false as flag,null as enddate from mergetest1_new i)x where x.flag is null and x.enddate is null;
+
+INSERT OVERWRITE TABLE mergetest_final
+SELECT m.*
+,(case when s.id is null then TRUE else false end) as flag
+,m.enddate
+from mergetest m left outer join mergetest_stg s on m.id=s.id;
+
+
+FINAL SCRIPTS:
+______________
+
+//DELETE SCRIPT
+INSERT OVERWRITE TABLE mergetest
+SELECT m.id
+,m.val
+,m.lastmod
+,(case when s.id is null then TRUE else false end) as flag
+,m.enddate
+from mergetest m left outer join mergetest_stg s on m.id=s.id;
+
+//incremental script
+INSERT OVERWRITE TABLE mergetest
+select distinct x.* from (SELECT m.id
+,m.val
+,m.lastmod
+,m.flag
+,(case when m.lastmod<i.lastmod then i.lastmod else (case when m.lastmod=i.lastmod then null end) end) as enddate
+from mergetest m left outer join mergetest_new i on m.id=i.id
+union all select * from mergetest_new)x where x.flag is null and x.enddate is null;

@@ -1,0 +1,60 @@
+hadoop fs -rm -r wasb://yetidatalake01@yetidatalake01.blob.core.windows.net/hive/warehouse/yetistaging13/sap_eina_incr
+sqoop import -D mapred.reduce.tasks=1 \
+--connect 'jdbc:sap://10.1.10.92:30415/?currentschema=SAPQR1' --driver com.sap.db.jdbc.Driver --username CELETI --password-file /sapqr1.password \
+--query "select CONCAT(A.MANDT,A.INFNR) as TABKEY
+, A.MANDT
+, A.INFNR
+, A.MATNR
+, A.MATKL
+, A.LIFNR
+, A.LOEKZ
+, A.ERDAT
+, A.ERNAM
+, A.TXZ01
+, A.SORTL
+, A.MEINS
+, A.UMREZ
+, A.UMREN
+, A.IDNLF
+, A.VERKF
+, A.TELF1
+, A.MAHN1
+, A.MAHN2
+, A.MAHN3
+, A.URZNR
+, A.URZDT
+, A.URZLA
+, A.URZTP
+, A.URZZT
+, A.LMEIN
+, A.REGIO
+, A.VABME
+, A.LTSNR
+, A.LTSSF
+, A.WGLIF
+, A.RUECK
+, A.LIFAB
+, A.LIFBI
+, A.KOLIF
+, A.ANZPU
+, A.PUNEI
+, A.RELIF
+, A.MFRNR
+, A.DUMMY_EINA_INCL_EEW_PS 
+, B.UDATETIME 
+, (CURRENT_DATE||' '|| HOUR(CURRENT_TIME)||':00:00') AS DwLastUpdated 
+from SAPQR1.EINA A join 
+(SELECT pos.TABKEY,pos.OBJECTID,pos.TABNAME,hdr.UDATE,hdr.UTIME,TO_TIMESTAMP(hdr.UDATE||hdr.UTIME,'YYYYMMDDHH24MISS') AS UDATETIME,ROW_NUMBER() OVER (PARTITION BY pos.TABKEY ORDER BY hdr.UDATE desc,hdr.UTIME DESC) rn 
+FROM SAPQR1.CDPOS pos join SAPQR1.CDHDR hdr on pos.MANDANT=hdr.MANDANT AND pos.OBJECTCLAS=hdr.OBJECTCLAS AND pos.OBJECTID=hdr.OBJECTID AND pos.CHANGENR=hdr.CHANGENR AND POS.TABNAME='EINA') B on CONCAT(A.MANDT,A.INFNR) = B.TABKEY and B.RN = 1 and A.MANDT = '225'
+WHERE A.ERDAT > '$(hadoop fs -text wasb://yetidatalake01@yetidatalake01.blob.core.windows.net/hive/warehouse/yetistaging13/max_createdate/sap_eina_stg/000000_0)' and A.ERDAT < CURRENT_DATE or
+B.UDATETIME > '$(hadoop fs -text wasb://yetidatalake01@yetidatalake01.blob.core.windows.net/hive/warehouse/yetistaging13/max_timestamp/sap_eina_stg/000000_0)' and B.UDATETIME < (CURRENT_DATE||' '|| '00:00:00') and \$CONDITIONS" \
+--merge-key TABKEY \
+-m1 \
+--split-by INFNR \
+--fields-terminated-by '\001' \
+--lines-terminated-by '\n' \
+--hive-delims-replacement ' ' \
+--null-string '\\N' \
+--null-non-string '\\N' \
+--target-dir wasb://yetidatalake01@yetidatalake01.blob.core.windows.net/hive/warehouse/yetistaging13/sap_eina_incr \
+--mapreduce-job-name sap_eina_incr

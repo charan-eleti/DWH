@@ -1,0 +1,43 @@
+
+https://docs.microsoft.com/en-us/azure/data-factory/v1/data-factory-repeatable-copy#repeatable-read-from-relational-sources
+
+Stored procedure
+
+CREATE PROCEDURE spMergetable @testtable Mergetable READONLY
+
+AS
+
+BEGIN
+
+MERGE [dbo].[testtable] AS a
+
+USING testtable AS b
+
+ON (a.id = b.id)
+
+WHEN NOT MATCHED
+
+THEN INSERT(id, status,created_at,updated_at)
+
+VALUES(b.id, b.status,b.created_at, b.updated_at)
+
+WHEN MATCHED
+
+THEN UPDATE SET a.status = b.status;
+
+END
+
+LinkedService
+
+             "type": "Copy",
+                "typeProperties": {
+                    "source": {
+                        "type": "RelationalSource",
+                        "query": "select * from \"public\".\"testtable\""
+                    },
+                    "sink": {
+                        "type": "SqlSink",
+                        "sqlWriterStoredProcedureName": "spMergetable",
+                        "sqlWriterTableType": "Mergetable",
+                        "writeBatchSize": 0,
+                        "writeBatchTimeout": "00:00:00"

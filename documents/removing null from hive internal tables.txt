@@ -1,0 +1,18 @@
+drop table person1;
+CREATE EXTERNAL TABLE person1
+(
+    name string,
+    title string,
+    id int,
+    birth_year string)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '|'
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE
+TBLPROPERTIES("NULL DEFINED AS ''");
+LOCATION 'wasb://yetidatalake01@yetidatalake01.blob.core.windows.net/hive/warehouse/input'
+
+
+echo -e "mark||1|2011\ntony|Mr.|null|2012\nrichard||3|2013" > /home/yeti/input.txt
+
+"serialization.null.format"='',

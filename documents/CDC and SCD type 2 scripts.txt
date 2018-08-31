@@ -1,0 +1,60 @@
+use default;
+use default;
+Drop table if exists [INCREMENTAL TABLE];
+CREATE EXTERNAL TABLE IF NOT EXISTS [INCREMENTAL TABLE]
+(
+      Company STRING
+    , CustID STRING
+    , CustNum INT
+    , Name STRING
+    , Address1 STRING
+.........
+.........
+.........
+    , ChangeDateTime TIMESTAMP
+    , DwLastUpdated TIMESTAMP)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '\001'
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE
+LOCATION 'wasb://yetidatalake01@yetidatalake01.blob.core.windows.net/hive/warehouse/yetistaging14/[INCREMENTAL TABLE]';
+
+//versioning history records in [STAGING TABLE] table
+insert overwrite table [STAGING TABLE]
+select x.* from (SELECT       s.Company 
+    , s.CustID 
+    , s.CustNum
+    , s.Name 
+    , s.Address1
+    , s.Address2
+    , s.Address3
+...............
+...............
+...............
+    , s.ChangeDateTime
+    , s.DwLastUpdated
+    ,(case when s.SysRevID<i.SysRevID then current_timestamp() else (case when s.SysRevID=i.SysRevID then null end) end) as EndDate
+    , FALSE as isDeleted
+from [staging table] s left outer join [incremental table] i on s.[primary keys]=i.[primary keys]
+union all
+select *
+    , NULL as EndDate
+    , FALSE as isDeleted
+from [incremental table] i)x;
+
+//Flagging out Deleted Records in [staging table] table
+INSERT OVERWRITE TABLE [staging table]
+SELECT s.Company 
+    , s.CustID 
+    , s.CustNum
+    , s.Name 
+    , s.Address1
+    , s.Address2
+................
+................
+................
+    , s.ChangeDateTime
+    , s.DwLastUpdated
+    , s.EndDate
+    ,(case when f.company is null then TRUE else FALSE end) as isDeleted
+from [staging table] s left outer join [full table over weekend] f on s.[primary keys]=f.[primary keys];
