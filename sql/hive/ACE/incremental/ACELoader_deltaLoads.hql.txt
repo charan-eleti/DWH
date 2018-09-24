@@ -22,3 +22,6 @@ SELECT `Site`,
 `Eaches_Cost`,
 `year_day`
 FROM edw_sales.ace_sell_through;
+
+drop table if Exists ace_sell_through_text;
+create table if not Exists ace_sell_through_text as select * from ace_sell_through;
