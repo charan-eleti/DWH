@@ -23,7 +23,7 @@ CREATE EXTERNAL TABLE IF NOT EXISTS edw_sales.ace_sell_through
 )
 PARTITIONED BY (year_day DATE)
 ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
-WITH SERDEPROPERTIES ("quoteChar"= "'")
+WITH SERDEPROPERTIES ("quoteChar"= "\"")
 STORED AS TEXTFILE
 LOCATION 'adl://yetiadls.azuredatalakestore.net/clusters/data/03_transformed/ace';
 
