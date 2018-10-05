@@ -1,27 +1,4 @@
 MSCK REPAIR TABLE edw_sales.ace_sell_through;
 
-INSERT OVERWRITE TABLE edw_sales.ace_sell_through_ORC PARTITION(year_day) 
-SELECT `Site`,
-`SiteDescription`,
-`Customer_#`,
-`Customer_Name`,
-`Address_Line_1`,
-`Address_Line_2`,
-`City`,
-`State`,
-`ZipCode`,
-`Business_Class`,
-`Format`,
-`Manufacturer_#`,
-`Manufacturer_Class_Code`,
-`Merchandise_Class`,
-`Product_Group`,
-`Article`,
-`Article_Name`,
-`Eaches_Item`,
-`Eaches_Cost`,
-`year_day`
-FROM edw_sales.ace_sell_through;
-
-drop table if Exists ace_sell_through_text;
-create table if not Exists ace_sell_through_text as select * from ace_sell_through;
+Drop table if Exists edw_sales.ace_sell_through_text;
+Create table if not Exists edw_sales.ace_sell_through_text as select * from edw_sales.ace_sell_through;
