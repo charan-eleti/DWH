@@ -1,7 +1,8 @@
-package com.yeti.dwh.ACE
 
+import java.io.File
 import java.net.URI
 
+import org.apache.commons.io.FileUtils
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.{FileSystem, Path}
 
@@ -17,9 +18,9 @@ object HDFSUtil {
   //init()
 
   def init(fs: FileSystem = null) = {
-    if(null == fs){
+    if (null == fs) {
       fileSystem = FileSystem.get(conf)
-    } else{
+    } else {
       fileSystem = fs
     }
   }
@@ -31,21 +32,21 @@ object HDFSUtil {
   }
 
   //drop and recreate the directory
-  def recreateDirectory(path: String): Unit ={
+  def recreateDirectory(path: String): Unit = {
     deleteDirectory(path)
     createDirectory(path)
   }
 
   //delete directory
-  def deleteDirectory(path: String): Unit ={
+  def deleteDirectory(path: String): Unit = {
     val dirPath = new Path(path)
     fileSystem.delete(dirPath, true)
   }
 
   //create directory
-  def createDirectory(dirPath: String): Unit ={
+  def createDirectory(dirPath: String): Unit = {
     val path = new Path(dirPath)
-    if(!fileSystem.exists(path)){
+    if (!fileSystem.exists(path)) {
       fileSystem.mkdirs(path)
     }
   }
@@ -54,7 +55,7 @@ object HDFSUtil {
   def listDirectories(path: String, fullPath: Boolean): List[String] = {
     var list: List[String] = List[String]()
     val status = fileSystem.listStatus(new Path(path))
-    if(fullPath){
+    if (fullPath) {
       status.foreach(x => list ::= x.getPath.toString)
     } else {
       status.foreach(x => list ::= x.getPath.getName)
@@ -66,23 +67,22 @@ object HDFSUtil {
   def moveFileOrDir(src: String, target: String): Unit = {
     val srcPath = new Path(src)
     val targetPath = new Path(target)
-    if(fileSystem.exists(srcPath)){
+    if (fileSystem.exists(srcPath)) {
       fileSystem.rename(srcPath, targetPath)
     }
   }
 
-  //move child directories into target directory
   def moveNestedDir(srcDir: String, targetDir: String): Unit = {
     val srcFiles = listDirectories(srcDir, false)
-    for(srcFile <- srcFiles){
-      if(exists(srcDir + "/" + srcFile)) {
+    for (srcFile <- srcFiles) {
+      if (exists(srcDir + "/" + srcFile)) {
         val targetFiles = listDirectories(srcDir + "/" + srcFile, false)
         for (targetFile <- targetFiles) {
           if (exists(targetDir + "/" + srcFile + "/" + targetFile)) {
             deleteDirectory(targetDir + "/" + srcFile + "/" + targetFile)
             moveFileOrDir(srcDir + "/" + srcFile + "/" + targetFile, targetDir + "/" + srcFile)
           } else {
-            if(!exists(targetDir + "/" + srcFile)) {
+            if (!exists(targetDir + "/" + srcFile)) {
               createDirectory(targetDir + "/" + srcFile)
             }
             moveFileOrDir(srcDir + "/" + srcFile + "/" + targetFile, targetDir + "/" + srcFile)
@@ -92,11 +92,27 @@ object HDFSUtil {
     }
   }
 
+  //move ace child directories into target directory
+  def moveAceNestedDir(srcDir: String, targetDir: String): Unit = {
+    val srcFiles = listDirectories(srcDir, false)
+    for (srcFile <- srcFiles) {
+      val targetFiles = listDirectories(srcDir + "/" + srcFile, false)
+      deleteDirectory(targetDir + "/" + srcFile) //+ "/" + targetFile)
+      for (targetFile <- targetFiles) {
+        if (!exists(targetDir + "/" + srcFile)) {
+          createDirectory(targetDir + "/" + srcFile)
+        }
+        moveFileOrDir(srcDir + "/" + srcFile + "/" + targetFile, targetDir + "/" + srcFile)
+      }
+      deleteDirectory(srcDir + "/" + srcFile)
+    }
+  }
+
   //move inputFiles into archive directory
   def moveInputFiles(srcDir: String, targetDir: String): Unit = {
     val srcFiles = listDirectories(srcDir, false)
-    for(srcFile <- srcFiles){
-      if(exists(srcDir + "/" + srcFile)) {
+    for (srcFile <- srcFiles) {
+      if (exists(srcDir + "/" + srcFile)) {
         if (exists(targetDir + "/" + srcFile)) {
           deleteDirectory(targetDir + "/" + srcFile)
           moveFileOrDir(srcDir + "/" + srcFile, targetDir)

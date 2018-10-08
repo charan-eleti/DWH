@@ -28,6 +28,7 @@ object ACELoader {
       StructField("Eaches_Item", StringType, nullable = true) ::
       StructField("Eaches_Cost", StringType, nullable = true) :: Nil
   )
+
   def main(args: Array[String]) {
     /*
   //Usage:
@@ -46,42 +47,46 @@ object ACELoader {
     val hiveTablePath = args(2)
     val backupPath = args(3)
     Logger.getLogger("org").setLevel(Level.ERROR)
-    val fileName = HDFSUtil.listDirectories(inputPath, false)
-    val year_day = fileName(0).splitAt(9)._2.splitAt(10)._1
+    val dirs = HDFSUtil.listDirectories(inputPath, false)
     //val loadDateTime = new SimpleDateFormat("yyyy-MM-dd HH:MM:SS").format(Calendar.getInstance().getTime)
     val spark = SparkSession.builder
       //.master("local")
       .appName("ACELoader")
       .getOrCreate()
-    val inputDF = spark.read.format("com.databricks.spark.csv")
-      .option("header", "true")
-      .option("inferSchema", "false")
-      .option("delimiter", ",")
-      .option("quote", "\"")
-      .schema(struct)
-      .load(inputPath)
-    //val indexed = inputDF.withColumn("index", monotonically_increasing_id())
-    //val filtered = indexed.filter(col("index") > 1).drop("index")
-    val outputDF = inputDF.withColumn("year_day", lit(year_day))
-    outputDF.printSchema()
-    //outputDF.show(5)
-    outputDF.write.partitionBy("year_day")
-      .option("header", "false")
-      .mode(SaveMode.Overwrite)
-      //.option("delimiter", ",")
-      .csv(processedPath) //save to processed folder
-    println(">>> ACE input files in " + inputPath + " have been processed and copied to folder " + processedPath)
-    println("<<<delete _SUCCESS file in processed folder " + processedPath)
-    if (HDFSUtil.exists(processedPath + "/" + "_SUCCESS")) {
-      HDFSUtil.deleteDirectory(processedPath + "/" + "_SUCCESS") // delete _SUCCESS file in processed folder
+
+    for (dirName <- dirs) {
+      val year_day = dirName.splitAt(9)._2.splitAt(10)._1
+      println("Year Day:" + year_day)
+      val inputDF = spark.read.format("com.databricks.spark.csv")
+        .option("header", "true")
+        .option("inferSchema", "false")
+        .option("delimiter", ",")
+        .option("quote", "\"")
+        .schema(struct)
+        .load(inputPath + "/" + dirName)
+      //val indexed = inputDF.withColumn("index", monotonically_increasing_id())
+      //val filtered = indexed.filter(col("index") > 1).drop("index")
+      val outputDF = inputDF.withColumn("year_day", lit(year_day))
+      outputDF.printSchema()
+      //outputDF.show(5)
+      outputDF.write //.partitionBy("year_day")
+        .option("header", "false")
+        .mode(SaveMode.Overwrite)
+        //.option("delimiter", ",")
+        .csv(processedPath + "/" + "year_day=" + year_day) //save to processed folder
+      println(">>> ACE input files in " + inputPath + " have been processed and copied to folder " + processedPath)
+      println("<<<delete _SUCCESS file in processed folder " + processedPath)
+      if (HDFSUtil.exists(processedPath + "/" + "year_day=" + year_day + "/" + "_SUCCESS")) {
+        HDFSUtil.deleteDirectory(processedPath + "/" + "year_day=" + year_day + "/" + "_SUCCESS") // delete _SUCCESS file in processed folder
+      }
     }
-    println("<<<move child directories from " + processedPath + " to " + hiveTablePath)
-    HDFSUtil.moveNestedDir(processedPath, hiveTablePath) //move child directories from processed folder to target directory
-    //fsUtil.moveFileOrDir(inputPath, backupPath + "/loadDateTime=" + loadDateTime) //archive input files after processing for backup
-    println("<<<archive input files from " + inputPath + " to " + backupPath)
-    HDFSUtil.moveInputFiles(inputPath, backupPath) //archive input files after processing for backup
-    println("<<<create inputFiles Directory " + inputPath)
-    HDFSUtil.createDirectory(inputPath) //create inputFiles Directory for delta loads
-    println(">>>HDFSUtil Ends here")
+      println("<<<move child directories from " + processedPath + " to " + hiveTablePath)
+    HDFSUtil.moveAceNestedDir(processedPath, hiveTablePath) //move child directories from processed folder to target directory
+      //fsUtil.moveFileOrDir(inputPath, backupPath + "/loadDateTime=" + loadDateTime) //archive input files after processing for backup
+      println("<<<archive input files from " + inputPath + " to " + backupPath)
+      HDFSUtil.moveInputFiles(inputPath, backupPath) //archive input files after processing for backup
+      println("<<<create inputFiles Directory " + inputPath)
+      HDFSUtil.createDirectory(inputPath) //create inputFiles Directory for delta loads
+      println(">>>HDFSUtil Ends here")
+    }
   }
-}
