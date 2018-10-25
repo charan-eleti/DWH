@@ -56,7 +56,7 @@ object AceLoader {
     try {
       // Return if none found
       if (inputFiles.isEmpty) {
-        LOG.warn("Number of input files is zero, exiting!!")
+        LOG.warn("Number of input files is zero, exiting!")
         return
       }
       val dirs = HDFSUtil.listDirectories(inputPath, fullPath = false)
