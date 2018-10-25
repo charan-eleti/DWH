@@ -1,4 +1,4 @@
-[error] C:\Users\areddy\GitHub\development\dwh\spark\Scala\EDW\src\main\scala\com\yeti\dwh\edifice\HDFSUtil.scala:139:11: com.yeti.dwh.edifice.fsUtil.type does not take parameters
-[error]     fsUtil(spark)
-[error]           ^
-[error] one error found
+[0m[[0m[31merror[0m] [0m[0mC:\Users\venkat.preetham\Desktop\dwh_src\spark\Scala\EDW\src\main\scala\com\yeti\dwh\ACE\ACELoader.scala:84:14: value moveAceNestedDir is not a member of object com.yeti.dwh.ACE.HDFSUtil[0m
+[0m[[0m[31merror[0m] [0m[0m    HDFSUtil.moveAceNestedDir(processedPath, hiveTablePath) //move child directories from processed folder to target directory[0m
+[0m[[0m[31merror[0m] [0m[0m             ^[0m
+[0m[[0m[31merror[0m] [0m[0mone error found[0m
