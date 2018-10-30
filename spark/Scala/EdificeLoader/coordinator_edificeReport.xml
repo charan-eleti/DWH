@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<coordinator-app xmlns="uri:oozie:coordinator:0.5" end="2025-07-26T22:00Z" frequency="${coord:hours(12)}" name="edificeReportCoordinator" start="2018-07-26T22:00Z" timezone="GMT-06:00">
+    <action>
+        <workflow>
+            <app-path>/oozie/workflows/EDIFICE/workflow.xml</app-path>
+        </workflow>
+    </action>
+</coordinator-app>

@@ -1,0 +1,70 @@
+<workflow-app name="edificeReportWF"
+              xmlns="uri:oozie:workflow:0.5">
+    <start to="CheckFile"/>
+    <decision name="CheckFile">
+        <switch>
+            <case to="Edifice_loader">${fs:exists('adl://yetiadls.azuredatalakestore.net/clusters/data/01_raw/edifice/*.txt')}</case>
+            <default to="end"/>
+        </switch>
+    </decision>
+    <action name="Edifice_loader">
+        <shell
+                xmlns="uri:oozie:shell-action:0.3">
+            <job-tracker>${resourceManager}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <exec>spark-submit</exec>
+            <argument>--master</argument>
+            <argument>yarn</argument>
+            <argument>--deploy-mode</argument>
+            <argument>cluster</argument>
+            <argument>--class</argument>
+            <argument>com.yeti.dwh.edifice.edificeLoader</argument>
+            <argument>adl://yetiadls.azuredatalakestore.net/clusters/yeti-dpe-3600/oozie/workflows/EDIFICE/lib/com.yeti.edw.EdificeLoader.jar</argument>
+            <argument>adl://yetiadls.azuredatalakestore.net/clusters/data/01_raw/edifice</argument>
+            <argument>adl://yetiadls.azuredatalakestore.net/clusters/data/02_staging/edifice</argument>
+            <argument>adl://yetiadls.azuredatalakestore.net/clusters/data/03_transformed/edifice</argument>
+            <argument>adl://yetiadls.azuredatalakestore.net/clusters/data/05_archive/edifice</argument>
+            <env-var>SPARK_MAJOR_VERSION=2</env-var>
+            <capture-output></capture-output>
+        </shell>
+        <ok to="HiveTable"/>
+        <error to="Failure_Email"/>
+    </action>
+    <action name="HiveTable">
+        <hive2
+                xmlns="uri:oozie:hive2-action:0.2">
+            <job-tracker>${resourceManager}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <jdbc-url>jdbc:hive2://headnodehost:10001/default?hive.server2.transport.mode=http</jdbc-url>
+            <script>/oozie/workflows/EDIFICE/lib/edificeReport.hql</script>
+        </hive2>
+        <ok to="end"/>
+        <error to="Failure_Email"/>
+    </action>
+    <action name="Failure_Email">
+        <email
+                xmlns="uri:oozie:email-action:0.2">
+            <to>dl_edwdevelopers@yeti.com</to>
+            <subject>Workflow ${wf:name()} Failed</subject>
+            <body>The workflow ${wf:name()} failed with Transition:${wf:transition(wf:lastErrorNode())}
+                Last Error Node:
+                ${wf:lastErrorNode()}
+                Error Code:
+                ${wf:errorCode(wf:lastErrorNode())}
+                Error Message:
+                ${wf:errorMessage(wf:lastErrorNode())}
+                Rerun Status:
+                ${wf:run()}
+                External Id: ${wf:actionExternalId(wf:lastErrorNode())}
+                Tracker Uri: ${wf:actionTrackerUri(wf:lastErrorNode())}
+                External Status:
+                ${wf:actionExternalStatus(wf:lastErrorNode())}</body>
+        </email>
+        <ok to="end"/>
+        <error to="kill"/>
+    </action>
+    <kill name="kill">
+        <message>${wf:errorMessage(wf:lastErrorNode())}</message>
+    </kill>
+    <end name="end"/>
+</workflow-app>
