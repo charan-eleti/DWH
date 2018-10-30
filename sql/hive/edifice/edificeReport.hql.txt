@@ -80,20 +80,40 @@ STORED AS ORC;
 
 ###incremental loads
 
-MSCK REPAIR TABLE EDW.EDIFICE;
-
-INSERT OVERWRITE TABLE EDW.EDIFICE_ORC PARTITION(Retailer,year_day) 
-SELECT ID,
-account,
-upc,
-storenumber,
-qs,
-qa,
-qr,
-qu,
-xr,
-flag,
-lastUPD,
-Retailer,
-year_day
-FROM EDW.EDIFICE;
+MSCK REPAIR TABLE edw_tz.edifice_stg;
+DROP TABLE IF EXISTS edw.EDIFICE;
+CREATE TABLE IF NOT EXISTS edw.EDIFICE AS 
+SELECT ID
+      ,Account
+      , CAST(CASE   
+        WHEN ltrim(rtrim(lower(retailer))) like concat('%','aafes','%') THEN '100873'
+        WHEN ltrim(rtrim(lower(retailer))) like concat('%','academy','%') THEN '101354'
+        WHEN ltrim(rtrim(lower(retailer))) like concat('%','bass','%') THEN '101213'
+        WHEN ltrim(rtrim(lower(retailer))) like concat('%','cabelas','%') THEN '100121'
+        WHEN ltrim(rtrim(lower(retailer))) like concat('%','dicks','%') THEN '101583'
+        WHEN ltrim(rtrim(lower(retailer))) like concat('%','field','%') THEN '101583'
+        WHEN ltrim(rtrim(lower(retailer))) like concat('%','gander','%') THEN '100914'
+        WHEN ltrim(rtrim(lower(retailer))) like concat('%','golf','%') THEN '101583'
+        WHEN ltrim(rtrim(lower(retailer))) like concat('%','hibbett','%') THEN '102173'
+        WHEN ltrim(rtrim(lower(retailer))) like concat('%','moosejaw','%') THEN '103430'
+        WHEN ltrim(rtrim(lower(retailer))) like concat('%','nexcom','%') THEN '106889'
+        WHEN ltrim(rtrim(lower(retailer))) like concat('%','olympia','%') THEN '106838'
+        WHEN ltrim(rtrim(lower(retailer))) like concat('%','rei','%') THEN '100434'
+        WHEN ltrim(rtrim(lower(retailer))) like concat('%','ruralking','%') THEN '101886'
+        WHEN ltrim(rtrim(lower(retailer))) like concat('%','scheelssports','%') THEN '100710'
+        WHEN ltrim(rtrim(lower(retailer))) like concat('%','sportsmanswarehouse','%') THEN '100395'
+        WHEN ltrim(rtrim(lower(retailer))) like concat('%','westmarine','%') THEN '100463'
+            ELSE 'NULL' 
+       END AS INT) AS Custnum
+      , UPC 
+      , STORENUMBER
+      , QS
+      , QA
+      , QR
+      , QU
+      , XR
+      , flag
+      , lastUPD
+      , Retailer
+      , year_day
+ FROM edw_tz.edifice_stg;
